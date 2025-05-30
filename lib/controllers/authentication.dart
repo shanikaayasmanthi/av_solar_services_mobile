@@ -66,9 +66,10 @@ class AuthenticationController extends GetxController {
           debugPrint(decoded["data"]["token"]);
           token.value = decoded["data"]["token"].toString();
           box.write(
-            'token', token,
+            'token', token.value,
           );
-          box.write('user', decoded["data"]["user"]);
+          var user = decoded["data"]["user"];
+          box.write('user', user);
           // result.value = 'Login successfully';
           return decoded["data"]["user"];
         } else if(response.statusCode == 500){
@@ -86,7 +87,7 @@ class AuthenticationController extends GetxController {
 
     }catch(e){
       print('Error'+e.toString());
-      result.value = e.toString();
+      result.value = 'Check your connection';
     }
     }
 

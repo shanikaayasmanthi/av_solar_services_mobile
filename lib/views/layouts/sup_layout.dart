@@ -38,7 +38,7 @@ class _SupLayoutState extends State<SupLayout> {
       final userMap = box.read('user');//user details
       if (userMap != null) {
         user = User.fromJson(userMap);
-        debugPrint(user.name);
+        // debugPrint(user.name);
       }
       // Map<String,String>user = box.read('user');
       // debugPrint(user as String);
@@ -66,12 +66,25 @@ class _SupLayoutState extends State<SupLayout> {
                       ),),
                     //logout button
                     IconButton(
-                      onPressed: () async{
-                        final result = await _authenticationController.logout(
-                            token: token.toString());
-                        if(result){
-                          Get.offAllNamed('/');
-                        }
+                      onPressed: () {
+                        Get.snackbar(
+                          "Confirmation",
+                          "Are you sure you want to logout?",
+                          snackPosition: SnackPosition.TOP,
+                          mainButton: TextButton(
+                            onPressed: () async{
+                              final result = await _authenticationController.logout(
+                                  token: token.toString());
+                              if(result){
+                                Get.offAllNamed('/');
+                              }
+                            },
+                            child: const Text("Yes", style: TextStyle(color: textBlack)),
+                          ),
+                          backgroundColor: bgLightGreen,
+                          colorText: textBlack,
+                          // duration: Duration(seconds: 5),
+                        );
                       },
                       icon: const Icon(Icons.logout_rounded,
                         color: textWhite,
@@ -99,8 +112,8 @@ class _SupLayoutState extends State<SupLayout> {
                                   fontSize: 20),
                             ),
                             //phone number
-                            const Text("0712567856",
-                              style: TextStyle(
+                            Text(user.email,
+                              style: const TextStyle(
                                   color: textBlack,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15),),

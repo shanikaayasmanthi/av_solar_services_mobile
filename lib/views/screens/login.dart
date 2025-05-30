@@ -151,7 +151,11 @@ class _LoginState extends State<Login>{
                                   "Access denied",
                                   "Try Again",
                                   snackPosition: SnackPosition.TOP,
+                                  backgroundColor: bgLightGreen,
+                                  colorText: textBlack,
                                 );
+                                final token = _authenticationController.token.value.toString();
+                                _authenticationController.logout(token: token);
                               }
                             }
 
