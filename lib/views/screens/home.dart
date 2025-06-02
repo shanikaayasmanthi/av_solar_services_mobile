@@ -59,6 +59,9 @@ class _HomeState extends State<Home> {
                         itemCount: services.length,
                         itemBuilder: (context, index) => ServiceWidget(
                             service: services[index],
+                          onTimeSet: () {
+                            loadServices(); // reload services after time is set
+                          },
                             ),
                       ),
               ],

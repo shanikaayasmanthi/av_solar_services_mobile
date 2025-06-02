@@ -1,4 +1,5 @@
 class Service {
+  final int serviceId;
   final int projectId;
   final int projectNo;
   final String projectName;
@@ -11,6 +12,7 @@ class Service {
   final String? serviceTime;
 
   Service({
+    required this.serviceId,
     required this.projectId,
     required this.projectNo,
     required this.projectName,
@@ -25,6 +27,7 @@ class Service {
 
   factory Service.fromJson(Map<String, dynamic> json) {
     return Service(
+      serviceId: json['service_id'],
       projectId: json['project_id'],
       projectNo: json['project_no'],
       projectName: json['project_name'],

@@ -53,4 +53,49 @@ class ServicesController extends GetxController{
       return [];
     }
   }
+
+  Future setTime({
+    required int userId,
+    required int serviceId,
+    required int projectId,
+    required int projectNo,
+    required String time,
+})async{
+    try{
+      result.value = '';
+      if(box.read('token')!=null){
+        if(time!="00:00 AM"){
+          debugPrint(time);
+          var data = {
+            'user_id':userId,
+            'service_id':serviceId,
+            'project_id':projectId,
+            'project_no':projectNo,
+            'time':time,
+          };
+
+
+          final response = await API().postRequest(
+              route: "/sup/set_service_time",
+            data: data,
+            token: box.read('token'),
+          );
+          if(response.statusCode == 200){
+            final decoded = json.decode(response.body);
+            result.value = "Successfully reserved ${time} for service of project No : ${projectNo}";
+            return decoded['data']['result'];
+          }else{
+            result.value = "Error occurred! Try Again";
+            return 0;
+          }
+        }else{
+          result.value="Set the time";
+        }
+
+      }
+    }catch(e){
+      result.value = "Error occurred";
+      return 0;
+    }
+  }
 }

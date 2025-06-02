@@ -64,7 +64,7 @@ class _LoginState extends State<Login>{
                           alignment: Alignment.centerLeft,
                           child: Text(
                             error,
-                            style: TextStyle(color: Colors.red),
+                            style: TextStyle(color: textRed),
                           ),
                         )
                             : SizedBox.shrink();
@@ -116,7 +116,7 @@ class _LoginState extends State<Login>{
                           alignment: Alignment.center,
                           child: Text(
                             error,
-                            style: TextStyle(color: Colors.red),
+                            style: TextStyle(color: textRed),
                           ),
                         )
                             : SizedBox.shrink();

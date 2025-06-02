@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Service extends StatefulWidget {
-  const Service({super.key});
+class Service1 extends StatefulWidget {
+  const Service1({super.key});
 
   @override
-  State<Service> createState() => _ServiceState();
+  State<Service1> createState() => _ServiceState();
 }
 
-class _ServiceState extends State<Service> {
+class _ServiceState extends State<Service1> {
   @override
   Widget build(BuildContext context) {
     return Center(
