@@ -76,12 +76,12 @@ class _ServiceWidgetState extends State<ServiceWidget> {
             style: const TextStyle(fontSize: 13, color: textGrey),
           ),
           widget.service.serviceTime!=null? Container(
-            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
             child: Text(
               "Time : ${widget.service.serviceTime}",
               style: const TextStyle(color: textBlack),
             ),
-          ):SizedBox.shrink(),
+          ):const SizedBox.shrink(),
           const SizedBox(height: 10),
           //time button or continue button
           Row(
@@ -114,7 +114,7 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                           context: context,
                           isScrollControlled: true,
                           builder: (BuildContext context){
-                        return Container(
+                        return SizedBox(
                           height: 450,
                             child: TimePicker(
                               projectNo: widget.service.projectNo,
