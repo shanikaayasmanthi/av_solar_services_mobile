@@ -7,7 +7,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:av_solar_services/models/Service.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final void Function(String serviceId) onServiceContinueTap;
+  const Home({super.key, required this.onServiceContinueTap});
 
   @override
   State<Home> createState() => _HomeState();
@@ -58,11 +59,17 @@ class _HomeState extends State<Home> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: services.length,
                         itemBuilder: (context, index) => ServiceWidget(
-                            service: services[index],
+                          service: services[index],
                           onTimeSet: () {
+                            //refresh the home page
                             loadServices(); // reload services after time is set
                           },
-                            ),
+                          onContinue: (serviceId) {
+                            //load the service details page
+                            widget.onServiceContinueTap(
+                                serviceId); //pass the serviceId for the service details page when continue the service
+                          },
+                        ),
                       ),
               ],
             ),

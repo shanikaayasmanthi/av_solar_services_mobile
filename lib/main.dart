@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       getPages: [
         GetPage(name: '/', page: () => const Login()),
-        GetPage(name: '/main', page: () => const MainLayout()),
+        // GetPage(name: '/main', page: () => const MainLayout()),
         GetPage(name: '/sup', page: () => const SupLayout()),
       ],
       // home: Login()
