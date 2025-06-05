@@ -3,6 +3,7 @@ import 'package:av_solar_services/models/Service.dart';
 import 'package:av_solar_services/views/widgets/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:get/get.dart';
 
 class ServiceWidget extends StatefulWidget {
   const ServiceWidget({
@@ -112,6 +113,7 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                         //to direct to services page
                                         ElevatedButton(
                                             onPressed: () {
+                                              Get.back();
                                               widget.onContinue(widget
                                                   .service.serviceId
                                                   .toString()); //pass service id for continue the service
