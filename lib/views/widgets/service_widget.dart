@@ -9,16 +9,19 @@ class ServiceWidget extends StatefulWidget {
     super.key,
     required this.service,
     required this.onTimeSet,
+    required this.onContinue,
   });
 
   final Service service;
-  final VoidCallback onTimeSet;
+  final VoidCallback onTimeSet; //call back to refresh the home
+  final void Function(String serviceId)
+      onContinue; //callback to redirect service details page
   @override
   State<ServiceWidget> createState() => _ServiceWidgetState();
 }
 
 class _ServiceWidgetState extends State<ServiceWidget> {
-
+  //get the suffix for service rounds
   String getOrdinalSuffix(int number) {
     if (number >= 11 && number <= 13) return 'th';
     switch (number % 10) {
@@ -63,7 +66,7 @@ class _ServiceWidgetState extends State<ServiceWidget> {
             ],
           ),
           const SizedBox(height: 8),
-           Text(
+          Text(
             widget.service.customerName,
             style: const TextStyle(fontSize: 14),
           ),
@@ -75,13 +78,16 @@ class _ServiceWidgetState extends State<ServiceWidget> {
             widget.service.projectAddress,
             style: const TextStyle(fontSize: 13, color: textGrey),
           ),
-          widget.service.serviceTime!=null? Container(
-            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-            child: Text(
-              "Time : ${widget.service.serviceTime}",
-              style: const TextStyle(color: textBlack),
-            ),
-          ):SizedBox.shrink(),
+          widget.service.serviceTime != null
+              ? Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Text(
+                    "Time : ${widget.service.serviceTime}",
+                    style: const TextStyle(color: textBlack),
+                  ),
+                )
+              : const SizedBox.shrink(),
           const SizedBox(height: 10),
           //time button or continue button
           Row(
@@ -89,58 +95,106 @@ class _ServiceWidgetState extends State<ServiceWidget> {
             children: [
               Column(
                 children: [
-                  widget.service.serviceTime != null? ElevatedButton(//continue button
-                    onPressed: () {
-                      // Handle continue button action
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: bgGreen,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    ),
-                    child: const Text(
-                      'Continue',
-                      style: TextStyle(
-                          color: textWhite
-                      ),
-                    ),
-                  )
-                      :ElevatedButton(//get a time button
-                    onPressed: () async{
-                      // Handle Get a time button action
-                      final result = await showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (BuildContext context){
-                        return Container(
-                          height: 450,
-                            child: TimePicker(
-                              projectNo: widget.service.projectNo,
-                              serviceId: widget.service.serviceId,
-                              projectId: widget.service.projectId,
-                            ));
-                      });
-                      if (result == true) {
-                        //callback
-                        widget.onTimeSet();
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: bgGreen,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    ),
-                    child: const Text(
-                      'Get a time',
-                      style: TextStyle(
-                          color: textWhite
-                      ),
-                    ),
-                  ),
+                  widget.service.serviceTime != null
+                      ? ElevatedButton(
+                          //continue button
+                          onPressed: () {
+                            // Handle continue button action
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return SizedBox(
+                                    height: 150,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        //to direct to services page
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              widget.onContinue(widget
+                                                  .service.serviceId
+                                                  .toString()); //pass service id for continue the service
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: bgGreen,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 12),
+                                            ),
+                                            child: const Text(
+                                              "Continue",
+                                              style:
+                                                  TextStyle(color: textWhite),
+                                            )),
+                                        ElevatedButton(
+                                            //get location for the project site
+                                            onPressed: () {},
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: bgGreen,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 12),
+                                            ),
+                                            child: const Text(
+                                              "Location",
+                                              style:
+                                                  TextStyle(color: textWhite),
+                                            )),
+                                      ],
+                                    ),
+                                  );
+                                });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: bgGreen,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 12),
+                          ),
+                          child: const Text(
+                            'Continue',
+                            style: TextStyle(color: textWhite),
+                          ),
+                        )
+                      : ElevatedButton(
+                          //get a time button
+                          onPressed: () async {
+                            // Handle Get a time button action
+                            final result = await showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (BuildContext context) {
+                                  return SizedBox(
+                                      height: 450,
+                                      child: TimePicker(
+                                        projectNo: widget.service.projectNo,
+                                        serviceId: widget.service.serviceId,
+                                        projectId: widget.service.projectId,
+                                      ));
+                                });
+                            if (result == true) {
+                              //callback
+                              widget.onTimeSet();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: bgGreen,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 12),
+                          ),
+                          child: const Text(
+                            'Get a time',
+                            style: TextStyle(color: textWhite),
+                          ),
+                        ),
                 ],
               ),
               Column(
@@ -154,13 +208,15 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                             return Row(
                               children: [
                                 IconButton(
-                                    onPressed: (){
-                                      FlutterPhoneDirectCaller.callNumber(phoneNumber);
+                                    onPressed: () {
+                                      FlutterPhoneDirectCaller.callNumber(
+                                          phoneNumber);
                                       // launch(phoneNumber);
                                     },
-                                    icon:  const Icon(
-                                    Icons.phone,
-                                size: 15,)),
+                                    icon: const Icon(
+                                      Icons.phone,
+                                      size: 15,
+                                    )),
                                 // const SizedBox(width: 4),
                                 // Text(phoneNumber),
                                 // const SizedBox(width: 12),
@@ -169,7 +225,6 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                           }).toList(),
                         ),
                       ],
-
                     ],
                   )
                 ],
