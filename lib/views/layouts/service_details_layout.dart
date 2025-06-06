@@ -14,6 +14,6 @@ class ServiceDetailsLayout extends StatefulWidget {
 class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout> {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("${widget.serviceId}"),);
+    return Center(child: Text(widget.serviceId),);
   }
 }

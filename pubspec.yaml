@@ -15,11 +15,12 @@ dependencies:
   get: ^4.7.2
   get_storage: ^2.1.1  # Add version or remove if not used
   path_provider: ^2.1.1
-  cupertino_icons: ^1.0.8
+  cupertino_icons: ^1.0.8   #URI
   flutter_phone_direct_caller: ^2.1.0
   numberpicker: ^2.1.2
   url_launcher: ^6.3.1
-
+  google_maps_flutter: ^2.5.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
