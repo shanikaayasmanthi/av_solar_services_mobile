@@ -3,6 +3,7 @@ import 'package:av_solar_services/models/Service.dart';
 import 'package:av_solar_services/views/widgets/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:get/get.dart';
 
 class ServiceWidget extends StatefulWidget {
   const ServiceWidget({
@@ -14,7 +15,7 @@ class ServiceWidget extends StatefulWidget {
 
   final Service service;
   final VoidCallback onTimeSet; //call back to refresh the home
-  final void Function(String serviceId)
+  final void Function(int serviceId)
       onContinue; //callback to redirect service details page
   @override
   State<ServiceWidget> createState() => _ServiceWidgetState();
@@ -112,9 +113,8 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                         //to direct to services page
                                         ElevatedButton(
                                             onPressed: () {
-                                              widget.onContinue(widget
-                                                  .service.serviceId
-                                                  .toString()); //pass service id for continue the service
+                                              Get.back();
+                                              widget.onContinue(widget.service.serviceId); //pass service id for continue the service
                                             },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: bgGreen,
