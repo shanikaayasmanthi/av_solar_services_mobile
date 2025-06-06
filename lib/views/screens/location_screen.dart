@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:av_solar_services/views/widgets/location_widget.dart'; // <-- your custom map widget
 
 class LocationScreen extends StatefulWidget {
   final int projectId;
@@ -14,37 +14,9 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  LatLng? _projectLocation;
-  GoogleMapController? _mapController;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchProjectLocation();
-  }
-
-  Future<void> _fetchProjectLocation() async {
-    final url = Uri.parse('http://127.0.0.1:8000/api/project-location/${widget.projectId}');
-
-    try {
-      final response = await http.get(url);
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final lat = double.tryParse(data['latittude'].toString());
-        final lng = double.tryParse(data['longitude'].toString());
-
-        if (lat != null && lng != null && mounted) {
-          setState(() {
-            _projectLocation = LatLng(lat, lng);
-          });
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Project not found")));
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
-    }
-  }
+  double? _latittude;
+  double? _longitude;
+  bool _showMap = false;
 
   Future<void> _openMapWithProjectLocation(BuildContext context) async {
     final url = Uri.parse('http://127.0.0.1:8000/api/project-location/${widget.projectId}');
@@ -53,10 +25,24 @@ class _LocationScreenState extends State<LocationScreen> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        final lat = data['latittude'];
-        final lng = data['longitude'];
+        final latittude = data['latittude'];
+        final longitude = data['longitude'];
 
-        final googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$lat,$lng';
+        setState(() {
+          _latittude = double.tryParse(latittude.toString());
+          _longitude = double.tryParse(longitude.toString());
+        });
+
+        /// Delay map render until after current frame is drawn
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            setState(() {
+              _showMap = true;
+            });
+          }
+        });
+
+        final googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$latittude,$longitude';
 
         if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
           await launchUrl(Uri.parse(googleMapsUrl), mode: LaunchMode.externalApplication);
@@ -77,26 +63,8 @@ class _LocationScreenState extends State<LocationScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Map as background
-            _projectLocation != null
-                ? GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                      target: _projectLocation!,
-                      zoom: 15,
-                    ),
-                    onMapCreated: (controller) {
-                      _mapController = controller;
-                    },
-                    markers: {
-                      Marker(
-                        markerId: const MarkerId('projectLocation'),
-                        position: _projectLocation!,
-                      ),
-                    },
-                  )
-                : const Center(child: CircularProgressIndicator()),
-
-            // Top-left location button
+            if (_latittude != null && _longitude != null && _showMap)
+              LocationWidget(latittude: _latittude!, longitude: _longitude!),
             Positioned(
               top: 16,
               left: 16,
@@ -110,4 +78,5 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
     );
   }
-}
+} 
+ 
