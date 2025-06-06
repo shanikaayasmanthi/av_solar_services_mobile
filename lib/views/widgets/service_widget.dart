@@ -15,7 +15,7 @@ class ServiceWidget extends StatefulWidget {
 
   final Service service;
   final VoidCallback onTimeSet; //call back to refresh the home
-  final void Function(String serviceId)
+  final void Function(int serviceId)
       onContinue; //callback to redirect service details page
   @override
   State<ServiceWidget> createState() => _ServiceWidgetState();
@@ -114,9 +114,7 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                         ElevatedButton(
                                             onPressed: () {
                                               Get.back();
-                                              widget.onContinue(widget
-                                                  .service.serviceId
-                                                  .toString()); //pass service id for continue the service
+                                              widget.onContinue(widget.service.serviceId); //pass service id for continue the service
                                             },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: bgGreen,
