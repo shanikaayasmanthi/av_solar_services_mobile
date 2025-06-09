@@ -17,8 +17,9 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.3.0'
+        classpath 'com.android.tools.build:gradle:8.6.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        //classpath "dev.flutter:flutter-gradle-plugin"
     }
 }
 
@@ -28,5 +29,14 @@ allprojects {
         mavenCentral()
     }
 }
-
+ext {
+    flutter = [
+        compileSdkVersion: 34,
+        targetSdkVersion : 34,
+        minSdkVersion    : 21,
+        ndkVersion       : "25.1.8937393", // optional
+        versionCode      : 1,
+        versionName      : "1.0"
+    ]
+}
 

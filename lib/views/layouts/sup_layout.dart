@@ -29,7 +29,7 @@ class _SupLayoutState extends State<SupLayout> {
   late User user;
   //page
   int currentPage = 0;
-  final PageController _pageController = PageController();
+  // final PageController _pageController = PageController();
   //toolbar height
   bool _isExpanded = true;
 

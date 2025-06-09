@@ -1,14 +1,14 @@
 import 'package:av_solar_services/constants/colors.dart';
-import 'package:av_solar_services/main_layout.dart';
 import 'package:av_solar_services/views/layouts/sup_layout.dart';
 import 'package:av_solar_services/views/screens/login.dart';
+import 'package:av_solar_services/views/screens/location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
+      const SystemUiOverlayStyle(
         statusBarColor: bgGreen,
 
   ));
@@ -48,10 +48,17 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       getPages: [
         GetPage(name: '/', page: () => const Login()),
-        // GetPage(name: '/main', page: () => const MainLayout()),
+      // GetPage(name: '/main', page: () => const MainLayout()),
         GetPage(name: '/sup', page: () => const SupLayout()),
+        GetPage(
+             name: '/location',
+             page: () {
+              final args = Get.arguments as Map<String, dynamic>;
+              return LocationScreen(projectId: args['projectId']);
+             },
+        ),
       ],
-      // home: Login()
+       //home:Login()
     );
   }
 }

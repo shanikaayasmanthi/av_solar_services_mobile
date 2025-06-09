@@ -85,7 +85,7 @@ class ServicesController extends GetxController{
           );
           if(response.statusCode == 200){
             final decoded = json.decode(response.body);
-            result.value = "Successfully reserved ${time} for service of project No : ${projectNo}";
+            result.value = "Successfully reserved $time for service of project No : $projectNo";
             return decoded['data']['result'];
           }else{
             result.value = "Error occurred! Try Again";
