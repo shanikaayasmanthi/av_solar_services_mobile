@@ -31,7 +31,7 @@ class _TimePickerState extends State<TimePicker> {
   var timeFormat = "AM";
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.symmetric(horizontal: 40,vertical: 30),
+    return Padding(padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 30),
       child: Column(
         children: [
           Row(
@@ -45,7 +45,7 @@ class _TimePickerState extends State<TimePicker> {
               ),),
             ],
           ),
-          SizedBox(height: 20,),
+          const SizedBox(height: 20,),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
             child: Row(
@@ -175,7 +175,7 @@ class _TimePickerState extends State<TimePicker> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} $timeFormat",
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 19,
                 color: textGrey
               ),)
@@ -190,9 +190,9 @@ class _TimePickerState extends State<TimePicker> {
       color: result.toLowerCase().contains('successfully')?textGreen:textRed
     ),),
     )
-    :SizedBox.shrink();
+    :const SizedBox.shrink();
           }),
-          SizedBox(height: 20,),
+          const SizedBox(height: 20,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -208,7 +208,7 @@ class _TimePickerState extends State<TimePicker> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: bgGrey,
                   ),
-                  child: Text("Cancel",
+                  child: const Text("Cancel",
                   style: TextStyle(
                     color: textBlack
                   ),)

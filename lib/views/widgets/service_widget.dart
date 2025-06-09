@@ -3,6 +3,7 @@ import 'package:av_solar_services/models/Service.dart';
 import 'package:av_solar_services/views/widgets/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:av_solar_services/views/screens/location_screen.dart';
 import 'package:get/get.dart';
 
 class ServiceWidget extends StatefulWidget {
@@ -130,7 +131,14 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                             )),
                                         ElevatedButton(
                                             //get location for the project site
-                                            onPressed: () {},
+                                            onPressed: () {
+                                             Navigator.push(
+                                             context,
+                                             MaterialPageRoute(
+                                              builder: (context) => LocationScreen(projectId: widget.service.projectId),
+                                               ),
+                                              );
+                                            },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: bgGreen,
                                               padding:

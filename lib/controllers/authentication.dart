@@ -86,7 +86,7 @@ class AuthenticationController extends GetxController {
       }
 
     }catch(e){
-      print('Error'+e.toString());
+      print('Error$e');
       result.value = 'Check your connection';
     }
     }
