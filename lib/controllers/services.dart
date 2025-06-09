@@ -14,6 +14,7 @@ class ServicesController extends GetxController{
 
   final box = GetStorage();
 
+  //get all services for supervisor
   Future <List<Service>> getServices(
   {
     required int userId,
@@ -54,6 +55,7 @@ class ServicesController extends GetxController{
     }
   }
 
+  //set time for a service
   Future setTime({
     required int userId,
     required int serviceId,
@@ -98,4 +100,40 @@ class ServicesController extends GetxController{
       return 0;
     }
   }
+
+  //get project id from service id
+Future getProjectId({
+    required int userId,
+  required int serviceId
+}) async{
+    try{
+      var data ={
+        'service_id':serviceId,
+        'user_id':userId
+      };
+
+      final response = await API().postRequest(
+          route: '/sup/get_service_ProjectNo',
+          data: data,
+        token: box.read('token'),
+      );
+
+      if(response.statusCode == 200){
+        final decoded = json.decode(response.body);
+        return decoded['data'];
+      }else if(response.statusCode == 401){
+        result.value = 'Unauthorized';
+        return [];
+      }else{
+        result.value = 'Error occurred';
+        return [];
+      }
+
+    }catch(e){
+      result.value = e.toString();
+      return [];
+    }
+}
+
+
 }

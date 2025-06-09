@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 class SupervisorPageController extends GetxController{
 
   var currentPage = 0.obs;
-  var selectedService = ''.obs;
+  var selectedService = 0.obs;
 
   void goToHome() {
     currentPage.value = 0;
@@ -13,13 +13,13 @@ class SupervisorPageController extends GetxController{
     currentPage.value = 1;
   }
 
-  void openServiceDetails(String serviceId) {
+  void openServiceDetails(int serviceId) {
     selectedService.value = serviceId;
     currentPage.value = 2;
   }
 
   void closeServiceDetails() {
     currentPage.value = 0;
-    selectedService.value ='';
+    selectedService.value =0;
   }
 }

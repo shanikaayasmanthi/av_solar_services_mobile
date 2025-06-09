@@ -185,7 +185,7 @@ class _SupLayoutState extends State<SupLayout> {
                   case 2:
                     return ServiceDetailsLayout(
                         serviceId:
-                            pageController.selectedService.value.toString());
+                            pageController.selectedService.value);
 
                   default:
                     return const Center(child: Text("Page not found"));
