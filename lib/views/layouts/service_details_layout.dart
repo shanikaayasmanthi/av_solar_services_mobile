@@ -94,8 +94,8 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: const [
-                  ProjectDetails(),
+                children: [
+                  ProjectDetails(projectId: project?['project_id']),
                   ServiceSummery(),
                   ServiceForm(),
                 ],
