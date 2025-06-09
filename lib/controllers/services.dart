@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:av_solar_services/methods/api.dart';
+import 'package:av_solar_services/models/Customer.dart';
 import 'package:av_solar_services/models/Service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -133,6 +134,43 @@ Future getProjectId({
       result.value = e.toString();
       return [];
     }
+}
+
+  //get customer details of the project
+Future getCustomer({
+    required int projectId,
+}) async {
+    try{
+
+      var data = {
+        'project_id' :projectId
+      };
+      final response = await API().postRequest(
+          route: '/sup/get_customer',
+        data: data,
+        token: box.read('token')
+      );
+
+      if(response.statusCode == 200){
+        final decoded = json.decode(response.body);
+        debugPrint(decoded.toString());
+        final nestedData = decoded['data'];
+
+        if (nestedData != null && nestedData['customer'] != null) {
+          return Customer.fromNestedJson(nestedData);
+        } else {
+          debugPrint('Customer or data is null');
+          return null;
+        }
+      } else {
+        debugPrint('Failed with status code: ${response.statusCode}');
+        return null;
+      }
+    }catch(e){
+      result.value = 'Error occurred';
+      // return {};
+    }
+
 }
 
 

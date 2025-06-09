@@ -6,6 +6,7 @@ import 'package:av_solar_services/views/screens/service_summery.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+
 class ServiceDetailsLayout extends StatefulWidget {
   const ServiceDetailsLayout({
     super.key,
@@ -23,8 +24,7 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
   late TabController _tabController;
   final ServicesController _servicesController = Get.put(ServicesController());
   final box = GetStorage();
-  Map<dynamic,dynamic>? project;
-
+  Map<dynamic,dynamic>? project; // project can be null
 
   @override
   void initState() {
@@ -45,21 +45,29 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
 
   @override
   Widget build(BuildContext context) {
+    // Check if project data is available
+    if (project == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(), // Show a loading spinner
+        ),
+      );
+    }
+
+    // Once project is not null, build the main content
     return Scaffold(
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // Aligns children to the start
           children: [
             Padding(
               padding: const EdgeInsets.all(0),
-              // Adds spacing around the project info
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                // Align text to left
                 children: [
                   Text(
-                    "Project No: ${project?["project_no"]}",
+                    // Now 'project' is guaranteed not to be null here
+                    "Project No: ${project!["project_no"]}",
                     style: const TextStyle(
                       color: textBlack,
                       fontSize: 20,
@@ -68,7 +76,7 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "${project?["project_name"]}",
+                    "${project!["project_name"]}",
                     style: const TextStyle(
                       color: textBlack,
                       fontSize: 17,
@@ -77,8 +85,6 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
                 ],
               ),
             ),
-
-            // Tab bar for project details
             TabBar(
               controller: _tabController,
               labelColor: textBlack,
@@ -89,13 +95,12 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
                 Tab(text: "Service"),
               ],
             ),
-
-            // Tab views
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: const [
-                  ProjectDetails(),
+                children: [
+                  // Use `project!['project_id']` or a default value
+                  ProjectDetails(projectId: project!['project_id']),
                   ServiceSummery(),
                   ServiceForm(),
                 ],
