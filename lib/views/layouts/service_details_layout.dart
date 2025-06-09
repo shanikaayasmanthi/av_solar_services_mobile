@@ -85,8 +85,6 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
                 ],
               ),
             ),
-
-            // Tab bar for project details
             TabBar(
               controller: _tabController,
               labelColor: textBlack,
@@ -97,8 +95,6 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
                 Tab(text: "Service"),
               ],
             ),
-
-            // Tab views
             Expanded(
               child: TabBarView(
                 controller: _tabController,
