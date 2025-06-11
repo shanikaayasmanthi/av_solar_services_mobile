@@ -1,9 +1,14 @@
-import 'package:av_solar_services/constants/colors.dart';
-import 'package:av_solar_services/views/widgets/location_widget.dart';
+// Core Flutter imports
 import 'package:flutter/material.dart';
+
+// Package imports
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+
+// Application-specific imports
+import 'package:av_solar_services/constants/colors.dart';
+import 'package:av_solar_services/views/widgets/location_widget.dart';
 import 'package:av_solar_services/constants/base_url.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -20,9 +25,14 @@ class _LocationScreenState extends State<LocationScreen> {
   double? _longitude;
   bool _showMap = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadLocation();
+  }
+
   Future<void> _loadLocation() async {
     final url = Uri.parse('$baseUrl/project-location/${widget.projectId}');
-
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -73,22 +83,11 @@ class _LocationScreenState extends State<LocationScreen> {
         child: Stack(
           children: [
             if (_lattitude != null && _longitude != null && _showMap)
-              LocationWidget(lattitude: _lattitude!, longitude: _longitude!),
-            Positioned(
-              top: 16,
-              left: 16,
-              child: ElevatedButton(
-                onPressed: _loadLocation,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: bgGreen,
-                  foregroundColor: textWhite,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text('Open in Google Maps'),
+              LocationWidget(
+                lattitude: _lattitude!,
+                longitude: _longitude!,
+                onOpenGoogleMaps: _loadLocation,
               ),
-            ),
           ],
         ),
       ),
