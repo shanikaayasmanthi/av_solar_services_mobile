@@ -1,4 +1,5 @@
 import 'package:av_solar_services/views/widgets/customer_details.dart';
+import 'package:av_solar_services/views/widgets/solar_details.dart';
 import 'package:flutter/material.dart';
 
 class ProjectDetails extends StatefulWidget {
@@ -22,7 +23,9 @@ class _ProjectDetailsState extends State<ProjectDetails> {
             children: [
               CustomerDetails(projectId: widget.projectId)
             ],
-          )
+          ),
+          
+             SolarPanelInfoCard(projectId: widget.projectId,)
         ],
       ),
     );
