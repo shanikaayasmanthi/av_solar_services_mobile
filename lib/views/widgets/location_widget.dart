@@ -196,7 +196,7 @@ class _LocationWidgetState extends State<LocationWidget> {
   }
 
   void _updateCamera() {
-    if (_mapController == null || _routePoints.isEmpty || _currentLocation == null) return;
+    if (_routePoints.isEmpty || _currentLocation == null) return;
 
     final List<String> currentCoords = _currentLocation!.split(', ');
     final LatLng currentLatLng = LatLng(double.parse(currentCoords[0]), double.parse(currentCoords[1]));
@@ -219,7 +219,7 @@ class _LocationWidgetState extends State<LocationWidget> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
+      value: const SystemUiOverlayStyle(
         statusBarColor: bgGreen, // Set status bar background to bgGreen
         statusBarIconBrightness: Brightness.light, // Ensure icons are visible (e.g., white)
       ),
@@ -233,7 +233,7 @@ class _LocationWidgetState extends State<LocationWidget> {
           Scaffold(
             appBar: AppBar(
               backgroundColor: bgLightGreen,
-              title: Text(
+              title: const Text(
                 'Project Location',
                 style: TextStyle(
                   fontSize: 20.0, // Increased text size

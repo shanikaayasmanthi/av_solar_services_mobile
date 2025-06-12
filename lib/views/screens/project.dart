@@ -11,7 +11,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Project"),
+      child: const Text("Project"),
     );
   }
 }
