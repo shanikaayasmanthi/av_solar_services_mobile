@@ -68,15 +68,16 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                   color: textWhite,
                   fontSize: 16
                 ),),
+                customer?.address!=null?
                 Text("${customer?.address}",
                   style: const TextStyle(
                       color: textWhite,
                       fontSize: 16
-                  ),),
+                  ),):const Text("Address not available",style: TextStyle(color: textWhite, fontSize: 14, fontStyle: FontStyle.italic),),
                 if (customer?.phoneNumbers == null || customer!.phoneNumbers.isEmpty)
                   const Text(
                     "No phone numbers available",
-                    style: TextStyle(color: textWhite, fontSize: 16, fontStyle: FontStyle.italic),
+                    style: TextStyle(color: textWhite, fontSize: 14, fontStyle: FontStyle.italic),
                   )
                 else
                   ...customer!.phoneNumbers.map((phone) => Text(
