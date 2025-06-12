@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:av_solar_services/methods/api.dart';
+import 'package:av_solar_services/models/Customer.dart';
 import 'package:av_solar_services/models/Service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ class ServicesController extends GetxController{
 
   final box = GetStorage();
 
+  //get all services for supervisor
   Future <List<Service>> getServices(
   {
     required int userId,
@@ -54,6 +56,7 @@ class ServicesController extends GetxController{
     }
   }
 
+  //set time for a service
   Future setTime({
     required int userId,
     required int serviceId,
@@ -82,7 +85,7 @@ class ServicesController extends GetxController{
           );
           if(response.statusCode == 200){
             final decoded = json.decode(response.body);
-            result.value = "Successfully reserved ${time} for service of project No : ${projectNo}";
+            result.value = "Successfully reserved $time for service of project No : $projectNo";
             return decoded['data']['result'];
           }else{
             result.value = "Error occurred! Try Again";
@@ -98,4 +101,77 @@ class ServicesController extends GetxController{
       return 0;
     }
   }
+
+  //get project id from service id
+Future getProjectId({
+    required int userId,
+  required int serviceId
+}) async{
+    try{
+      var data ={
+        'service_id':serviceId,
+        'user_id':userId
+      };
+
+      final response = await API().postRequest(
+          route: '/sup/get_service_ProjectNo',
+          data: data,
+        token: box.read('token'),
+      );
+
+      if(response.statusCode == 200){
+        final decoded = json.decode(response.body);
+        return decoded['data'];
+      }else if(response.statusCode == 401){
+        result.value = 'Unauthorized';
+        return [];
+      }else{
+        result.value = 'Error occurred';
+        return [];
+      }
+
+    }catch(e){
+      result.value = e.toString();
+      return [];
+    }
+}
+
+  //get customer details of the project
+Future getCustomer({
+    required int projectId,
+}) async {
+    try{
+
+      var data = {
+        'project_id' :projectId
+      };
+      final response = await API().postRequest(
+          route: '/sup/get_customer',
+        data: data,
+        token: box.read('token')
+      );
+
+      if(response.statusCode == 200){
+        final decoded = json.decode(response.body);
+        debugPrint(decoded.toString());
+        final nestedData = decoded['data'];
+
+        if (nestedData != null && nestedData['customer'] != null) {
+          return Customer.fromNestedJson(nestedData);
+        } else {
+          debugPrint('Customer or data is null');
+          return null;
+        }
+      } else {
+        debugPrint('Failed with status code: ${response.statusCode}');
+        return null;
+      }
+    }catch(e){
+      result.value = 'Error occurred';
+      // return {};
+    }
+
+}
+
+
 }

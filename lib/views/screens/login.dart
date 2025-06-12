@@ -2,7 +2,6 @@ import 'package:av_solar_services/constants/colors.dart';
 import 'package:av_solar_services/controllers/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 
 class Login extends StatefulWidget {
   const Login ({super.key});
@@ -48,7 +47,7 @@ class _LoginState extends State<Login>{
                         controller: _usernameController,
                         decoration: InputDecoration(
                             hintText: "username",
-                            hintStyle: TextStyle(color: textGrey),
+                            hintStyle: const TextStyle(color: textGrey),
                             filled: true,
                             fillColor: bgGrey,
                             border: OutlineInputBorder(
@@ -64,10 +63,10 @@ class _LoginState extends State<Login>{
                           alignment: Alignment.centerLeft,
                           child: Text(
                             error,
-                            style: TextStyle(color: textRed),
+                            style: const TextStyle(color: textRed),
                           ),
                         )
-                            : SizedBox.shrink();
+                            : const SizedBox.shrink();
                       }),
 
 
@@ -78,7 +77,7 @@ class _LoginState extends State<Login>{
                         obscureText: true,
                         decoration: InputDecoration(
                           hintText: "password",
-                          hintStyle: TextStyle(color: textGrey),
+                          hintStyle: const TextStyle(color: textGrey),
                           filled: true,
                           fillColor: bgGrey,
                           border: OutlineInputBorder(
@@ -94,10 +93,10 @@ class _LoginState extends State<Login>{
                           alignment: Alignment.centerLeft,
                           child: Text(
                             error,
-                            style: TextStyle(color: textRed),
+                            style: const TextStyle(color: textRed),
                           ),
                         )
-                            : SizedBox.shrink();
+                            : const SizedBox.shrink();
                       }),
                       //forget password
                       Align(
@@ -116,10 +115,10 @@ class _LoginState extends State<Login>{
                           alignment: Alignment.center,
                           child: Text(
                             error,
-                            style: TextStyle(color: textRed),
+                            style: const TextStyle(color: textRed),
                           ),
                         )
-                            : SizedBox.shrink();
+                            : const SizedBox.shrink();
                       }),
 
                       const SizedBox(height: 10,),
