@@ -101,8 +101,8 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
                 children: [
                   // Use `project!['project_id']` or a default value
                   ProjectDetails(projectId: project!['project_id']),
-                  ServiceSummery(),
-                  ServiceForm(),
+                  const ServiceSummery(),
+                  const ServiceForm(),
                 ],
               ),
             ),
