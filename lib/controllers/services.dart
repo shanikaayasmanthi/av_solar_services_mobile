@@ -153,17 +153,19 @@ Future getCustomer({
 
       if(response.statusCode == 200){
         final decoded = json.decode(response.body);
-        debugPrint(decoded.toString());
+        // debugPrint(decoded.toString());
         final nestedData = decoded['data'];
 
         if (nestedData != null && nestedData['customer'] != null) {
           return Customer.fromNestedJson(nestedData);
         } else {
-          debugPrint('Customer or data is null');
+          // debugPrint('Customer or data is null');
+          result.value = 'Customer or data is null';
           return null;
         }
       } else {
-        debugPrint('Failed with status code: ${response.statusCode}');
+        // debugPrint('Failed with status code: ${response.statusCode}');
+        result.value = 'Failed with status code: ${response.statusCode}';
         return null;
       }
     }catch(e){
@@ -171,6 +173,35 @@ Future getCustomer({
       // return {};
     }
 
+}
+
+Future getProjectDetails({
+    required int projectId
+}) async {
+    try{
+      var data = {
+        'project_id':projectId
+      };
+
+      final response = await API().postRequest(
+          route: '/sup/get_project',
+        data: data,
+        token: box.read('token')
+      );
+
+      final decoded = json.decode(response.body);
+      if(decoded['data']!=null){
+        // debugPrint(decoded['data'].toString());
+        return decoded;
+      }else{
+        return {};
+      }
+
+
+    }catch(e){
+      result.value="Error occurred ${e}";
+      return {};
+    }
 }
 
 
