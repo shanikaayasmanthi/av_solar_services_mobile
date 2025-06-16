@@ -95,17 +95,17 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
                 Tab(text: "Service"),
               ],
             ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  // Use `project!['project_id']` or a default value
-                  ProjectDetails(projectId: project!['project_id']),
-                  ServiceSummery(),
-                  const ServiceForm(),
-                ],
-              ),
-            ),
+        // In ServiceDetailsLayout.dart, update the TabBarView:
+Expanded(
+  child: TabBarView(
+    controller: _tabController,
+    children: [
+      ProjectDetails(projectId: project!['project_id']),
+      ServiceSummery(projectId: project!['project_id']), // Pass projectId here
+      const ServiceForm(),
+    ],
+  ),
+),
           ],
         ),
       ),

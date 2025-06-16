@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:av_solar_services/methods/api.dart';
 import 'package:av_solar_services/models/Customer.dart';
-import 'package:av_solar_services/models/Service.dart';
+import 'package:av_solar_services/models/completed_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:av_solar_services/models/Service.dart';
 
 class ServicesController extends GetxController{
 
@@ -14,6 +15,37 @@ class ServicesController extends GetxController{
   final result = RxnString();
 
   final box = GetStorage();
+
+  // Add this to your ServicesController class
+Future<List<CompletedService>> getCompletedServicesSummary({
+  required int userId,
+  required int projectId,
+}) async {
+  try {
+    var data = {
+      'user_id': userId,
+      'project_id': projectId,
+    };
+
+    final response = await API().postRequest(
+      route: '/sup/get_completed_services',
+      data: data,
+      token: box.read('token'),
+    );
+
+    if (response.statusCode == 200) {
+      final decoded = json.decode(response.body);
+      final List<dynamic> services = decoded['data']['services'];
+      return services.map((json) => CompletedService.fromJson(json)).toList();
+    } else {
+      result.value = 'Error fetching completed services';
+      return [];
+    }
+  } catch (e) {
+    result.value = 'Error: ${e.toString()}';
+    return [];
+  }
+}
 
   //get all services for supervisor
   Future <List<Service>> getServices(
