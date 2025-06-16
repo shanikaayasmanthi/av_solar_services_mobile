@@ -199,7 +199,7 @@ Future getProjectDetails({
 
 
     }catch(e){
-      result.value="Error occurred ${e}";
+      result.value="Error occurred $e";
       return {};
     }
 }
