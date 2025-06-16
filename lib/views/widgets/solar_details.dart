@@ -77,10 +77,17 @@ class _SolarPanelInfoCardState extends State<SolarPanelInfoCard> {
         }
 
         if (data['battery'] != null) {
-          batteries = List<Map<String, dynamic>>.from(data['battery'])
-              .map((e) => Battery.froJson(e))
-              .toList();
+          final batteryData = data['battery'];
+
+          if (batteryData is List) {
+            batteries = batteryData
+                .map((e) => Battery.froJson(e as Map<String, dynamic>))
+                .toList();
+          } else if (batteryData is Map<String, dynamic>) {
+            batteries = [Battery.froJson(batteryData)];
+          }
         }
+
       }
       project != null? project?.type == 'ongrid'? projectdata =  {
         "project No":onGrid?.projectNo,
@@ -121,42 +128,42 @@ class _SolarPanelInfoCardState extends State<SolarPanelInfoCard> {
       children: [
         const Text("Project Details",style: TextStyle(color: textBlack,fontWeight: FontWeight.bold,fontSize: 18),),
         Card(
-        margin: const EdgeInsets.all(5),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        elevation: 4,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child:Column(
-            children: projectdata.entries.map((entry) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: Text(
-                        entry.key,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: textBlack,
+          margin: const EdgeInsets.all(5),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          elevation: 4,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child:Column(
+              children: projectdata.entries.map((entry) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          entry.key,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: textBlack,
+                          ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: Text(
-                        "${entry.value}",
-                        style: const TextStyle(color: textGrey),
+                      Expanded(
+                        flex: 4,
+                        child: Text(
+                          "${entry.value}",
+                          style: const TextStyle(color: textGrey),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
           ),
         ),
-      ),
         const SizedBox(height: 10,),
         const Text("Solar Panel Details",style: TextStyle(color: textBlack,fontWeight: FontWeight.bold,fontSize: 18),),
         Card(
@@ -277,65 +284,65 @@ class _SolarPanelInfoCardState extends State<SolarPanelInfoCard> {
         ),
         const SizedBox(height: 10,),
         batteries.isNotEmpty?
-          const Text("Battery Details",style: TextStyle(color: textBlack,fontWeight: FontWeight.bold,fontSize: 18),):const SizedBox.shrink(),
+        const Text("Battery Details",style: TextStyle(color: textBlack,fontWeight: FontWeight.bold,fontSize: 18),):const SizedBox.shrink(),
         batteries.isNotEmpty?Card(
-            margin: const EdgeInsets.all(5),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            elevation: 4,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child:Column(
-                children: batteries.map((entry) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            entry.brand,
-                            style: const TextStyle(
-                              color: textGrey,
-                            ),
+          margin: const EdgeInsets.all(5),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          elevation: 4,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child:Column(
+              children: batteries.map((entry) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          entry.brand,
+                          style: const TextStyle(
+                            color: textGrey,
                           ),
                         ),
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            entry.model,
-                            style: const TextStyle(color: textGrey),
-                          ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          entry.model,
+                          style: const TextStyle(color: textGrey),
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            entry.model,
-                            style: const TextStyle(color: textGrey),
-                          ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          entry.model,
+                          style: const TextStyle(color: textGrey),
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            "${entry.capacity}kW",
-                            style: const TextStyle(color: textGrey),
-                          ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          "${entry.capacity}kW",
+                          style: const TextStyle(color: textGrey),
                         ),
-                        Expanded(
-                          flex: 4,
-                          child: Text(
-                            entry.serialNo,
-                            style: const TextStyle(color: textGrey),
-                          ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Text(
+                          entry.serialNo,
+                          style: const TextStyle(color: textGrey),
                         ),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
             ),
-          ):const SizedBox.shrink(),
-        ]
+          ),
+        ):const SizedBox.shrink(),
+      ]
       ,
     ): const Text("Loading..",
       style: TextStyle(color: textGrey,fontStyle: FontStyle.italic),);
