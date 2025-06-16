@@ -7,7 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:av_solar_services/models/Service.dart';
 
 class Home extends StatefulWidget {
-  final void Function(int serviceId) onServiceContinueTap;
+  final void Function(int serviceId) onServiceContinueTap;//callback function for continue button
   const Home({super.key, required this.onServiceContinueTap});
 
   @override

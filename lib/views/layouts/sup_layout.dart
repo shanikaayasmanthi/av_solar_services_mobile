@@ -84,6 +84,7 @@ class _SupLayoutState extends State<SupLayout> {
                                   .logout(token: token.toString());
                               if (result) {
                                 Get.offAllNamed('/');
+                                box.erase();//delete all data from get
                               }
                             },
                             child: const Text("Yes",
