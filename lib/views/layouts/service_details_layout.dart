@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../../controllers/sup_page.dart';
+
 class ServiceDetailsLayout extends StatefulWidget {
   const ServiceDetailsLayout({
     super.key,
@@ -25,6 +27,9 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
   final ServicesController _servicesController = Get.put(ServicesController());
   final box = GetStorage();
   Map<dynamic,dynamic>? project; // project can be null
+
+  int currentStep =0;//store step of service form
+
 
   @override
   void initState() {
@@ -45,17 +50,30 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
 
   @override
   Widget build(BuildContext context) {
+
     // Check if project data is available
     if (project == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(), // Show a loading spinner
+      return WillPopScope(
+          onWillPop: () async {
+            // If you're on the Service Details page, go to home
+            final SupervisorPageController supervisorController = Get.find();
+            supervisorController.goToHome();
+            return false; // Prevent default back behavior
+          }, child:  const Scaffold(
+        body:  Center(
+          child:  CircularProgressIndicator(), // Show a loading spinner
         ),
-      );
+      ));
     }
 
     // Once project is not null, build the main content
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async {
+          // If you're on the Service Details page, go to home
+          final SupervisorPageController supervisorController = Get.find();
+          supervisorController.goToHome();
+          return false; // Prevent default back behavior
+        },child:  Scaffold(
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,20 +113,28 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
                 Tab(text: "Service"),
               ],
             ),
-        // In ServiceDetailsLayout.dart, update the TabBarView:
-Expanded(
-  child: TabBarView(
-    controller: _tabController,
-    children: [
-      ProjectDetails(projectId: project!['project_id']),
-      ServiceSummery(projectId: project!['project_id']), // Pass projectId here
-      const ServiceForm(),
-    ],
-  ),
-),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  ProjectDetails(projectId: project!["project_id"]),
+                  ServiceSummery(projectId: project!['project_id']), // Pass projectId here
+                  ServiceForm(
+                    serviceId: widget.serviceId,
+                    currentStep: currentStep,
+                    onStepChanged: (step) {
+                      setState(() {
+                        currentStep = step;//set the current step of service form
+                      });
+                    },
+                  ),
+                ],
+              ),
+
+            ),
           ],
         ),
       ),
-    );
+    ));
   }
 }
