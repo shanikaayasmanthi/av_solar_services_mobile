@@ -9,7 +9,7 @@ class CompletedService {
   final Map<String, dynamic>? mainPanelWork;
   final Map<String, dynamic>? dcWork;
   final Map<String, dynamic>? acWork;
-  final bool isPaid; // Added to distinguish free/paid services
+  final bool isPaid;
 
   CompletedService({
     required this.serviceRound,
@@ -22,7 +22,7 @@ class CompletedService {
     this.mainPanelWork,
     this.dcWork,
     this.acWork,
-    required this.isPaid, // Default to false for free services
+    required this.isPaid,
   });
 
   factory CompletedService.fromJson(Map<String, dynamic> json) {
@@ -37,7 +37,7 @@ class CompletedService {
       mainPanelWork: json['main_panel_work'],
       dcWork: json['dc_work'],
       acWork: json['ac_work'],
-      isPaid: json['service_type'] == 'paid', // Assuming service_type indicates paid/free
+      isPaid: json['is_paid'] ?? false,
     );
   }
 }

@@ -16,19 +16,18 @@ class ServicesController extends GetxController{
 
   final box = GetStorage();
 
-  // Add this to your ServicesController class
-Future<List<CompletedService>> getCompletedServicesSummary({
-  required int userId,
+
+  // Add this method to your ServicesController
+Future<List<CompletedService>> getCompletedServicesByProject({
   required int projectId,
 }) async {
   try {
     var data = {
-      'user_id': userId,
       'project_id': projectId,
     };
 
     final response = await API().postRequest(
-      route: '/sup/get_completed_services',
+      route: '/sup/get_completed_services_by_project',
       data: data,
       token: box.read('token'),
     );
@@ -235,6 +234,8 @@ Future getProjectDetails({
       return {};
     }
 }
+
+
 
 
 }

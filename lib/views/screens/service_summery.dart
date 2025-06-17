@@ -6,7 +6,7 @@ import 'package:av_solar_services/models/completed_service.dart';
 
 class ServiceSummery extends StatefulWidget {
   final int projectId;
-  
+
   const ServiceSummery({super.key, required this.projectId});
 
   @override
@@ -26,10 +26,11 @@ class _ServiceSummeryState extends State<ServiceSummery> {
   }
 
   void _loadCompletedServices() {
-    _completedServicesFuture = servicesController.getCompletedServicesSummary(
-      userId: servicesController.box.read('user')['id'],
+    _completedServicesFuture = servicesController
+        .getCompletedServicesByProject(
       projectId: widget.projectId,
-    ).then((services) {
+    )
+        .then((services) {
       // Calculate free and paid counts
       freeServicesCount = services.where((s) => !s.isPaid).length;
       paidServicesCount = services.where((s) => s.isPaid).length;
@@ -174,7 +175,7 @@ class _ServiceSummeryState extends State<ServiceSummery> {
                 return Column(
                   children: [
                     _buildServiceRoundCard(entry.value, entry.key),
-                    if (entry.key != services.length - 1) 
+                    if (entry.key != services.length - 1)
                       const SizedBox(height: 20),
                   ],
                 );
