@@ -8,12 +8,44 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../models/completed_service.dart';
+
 class ServicesController extends GetxController{
 
   final isLoading = false.obs;
   final result = RxnString();
 
   final box = GetStorage();
+
+
+  // Add this method to your ServicesController
+  Future<List<CompletedService>> getCompletedServicesByProject({
+    required int projectId,
+  }) async {
+    try {
+      var data = {
+        'project_id': projectId,
+      };
+
+      final response = await API().postRequest(
+        route: '/sup/get_completed_services_by_project',
+        data: data,
+        token: box.read('token'),
+      );
+
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        final List<dynamic> services = decoded['data']['services'];
+        return services.map((json) => CompletedService.fromJson(json)).toList();
+      } else {
+        result.value = 'Error fetching completed services';
+        return [];
+      }
+    } catch (e) {
+      result.value = 'Error: ${e.toString()}';
+      return [];
+    }
+  }
 
   //get all services for supervisor
   Future <List<Service>> getServices(
