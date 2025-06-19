@@ -84,7 +84,7 @@ class ServiceForm extends StatelessWidget {
         state: currentStep > 5 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 5,
         title: const Text("6"),
-        content: Text("6")
+        content: const Text("6")
     ),
   ];
 }
