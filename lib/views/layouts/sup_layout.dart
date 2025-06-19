@@ -200,7 +200,12 @@ class _SupLayoutState extends State<SupLayout> {
                   : pageController.currentPage.value,
               onTap: (index) {
                 if (index == 0) pageController.goToHome();
-                if (index == 1) pageController.goToProfile();
+                if (index == 1){
+                  pageController.goToProfile();
+                  setState(() {
+                    _isExpanded = false;
+                  });
+                }
               },
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(

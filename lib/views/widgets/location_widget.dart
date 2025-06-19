@@ -9,17 +9,21 @@ import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platf
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:get/get.dart';
+import 'package:av_solar_services/controllers/location.dart'; // Ensure correct path
+
+// Application-specific imports
 import 'package:av_solar_services/constants/colors.dart';
 
 class LocationWidget extends StatefulWidget {
-  final double lattitude;
-  final double longitude;
+  final double? lattitude; // Made nullable to handle initial loading
+  final double? longitude; // Made nullable to handle initial loading
   final VoidCallback onOpenGoogleMaps;
 
   const LocationWidget({
     super.key,
-    required this.lattitude,
-    required this.longitude,
+    this.lattitude,
+    this.longitude,
     required this.onOpenGoogleMaps,
   });
 
@@ -34,6 +38,7 @@ class _LocationWidgetState extends State<LocationWidget> {
   List<LatLng> _routePoints = []; // State variable for route points
   bool _showDirection = false; // State to toggle direction display
   String _distance = 'Distance not available'; // State for distance
+  final LocationController locationController = Get.find<LocationController>(); // Access controller
 
   @override
   void initState() {
@@ -44,6 +49,16 @@ class _LocationWidgetState extends State<LocationWidget> {
     }
     _updateLocations();
     _getCurrentLocation(); // Trigger initial location fetch
+    // Update project location if controller data is available
+    if (locationController.lattitude.value != null && locationController.longitude.value != null) {
+      _updateLocationsFromController();
+    }
+  }
+
+  void _updateLocationsFromController() {
+    setState(() {
+      _projectLocation = '${locationController.lattitude.value}, ${locationController.longitude.value}';
+    });
   }
 
   Future<void> _getCurrentLocation() async {
@@ -89,7 +104,9 @@ class _LocationWidgetState extends State<LocationWidget> {
 
   void _updateLocations() {
     setState(() {
-      _projectLocation = '${widget.lattitude}, ${widget.longitude}';
+      _projectLocation = widget.lattitude != null && widget.longitude != null
+          ? '${widget.lattitude}, ${widget.longitude}'
+          : _projectLocation ?? 'Loading...';
     });
   }
 
@@ -106,7 +123,7 @@ class _LocationWidgetState extends State<LocationWidget> {
     final currentLatLng = _currentLocation!.split(', ').map(double.parse).toList();
     // Replace YOUR_API_KEY with the key from AndroidManifest.xml
     final String url =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=${currentLatLng[0]},${currentLatLng[1]}&destination=${widget.lattitude},${widget.longitude}&mode=driving&key=com.google.android.geo.API_KEY'; // Ensure this key matches AndroidManifest.xml
+        'https://maps.googleapis.com/maps/api/directions/json?origin=${currentLatLng[0]},${currentLatLng[1]}&destination=${locationController.lattitude.value ?? widget.lattitude},${locationController.longitude.value ?? widget.longitude}&mode=driving&key=com.google.android.geo.API_KEY'; // Use controller or widget data
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -122,9 +139,9 @@ class _LocationWidgetState extends State<LocationWidget> {
                 _showDirection = true; // Enable direction display
                 // Enhanced distance extraction with detailed debugging
                 print('Routes: ${data['routes']?.length}, Legs: ${data['routes']?[0]['legs']?.length}');
-                if (data['routes'] != null && data['routes'].isNotEmpty && 
+                if (data['routes'] != null && data['routes'].isNotEmpty &&
                     data['routes'][0]['legs'] != null && data['routes'][0]['legs'].isNotEmpty &&
-                    data['routes'][0]['legs'][0]['distance'] != null && 
+                    data['routes'][0]['legs'][0]['distance'] != null &&
                     data['routes'][0]['legs'][0]['distance']['text'] != null) {
                   _distance = data['routes'][0]['legs'][0]['distance']['text'];
                   print('Distance extracted: $_distance');
@@ -133,7 +150,7 @@ class _LocationWidgetState extends State<LocationWidget> {
                   print('Distance data missing or invalid structure in API response');
                 }
               });
-              _updateCamera();
+              _updateCamera(); // Ensure camera adjusts to new route
             }
           } else {
             if (mounted) {
@@ -200,7 +217,10 @@ class _LocationWidgetState extends State<LocationWidget> {
 
     final List<String> currentCoords = _currentLocation!.split(', ');
     final LatLng currentLatLng = LatLng(double.parse(currentCoords[0]), double.parse(currentCoords[1]));
-    final LatLng projectLatLng = LatLng(widget.lattitude, widget.longitude);
+    final LatLng projectLatLng = LatLng(
+      (locationController.lattitude.value ?? widget.lattitude) ?? 0.0,
+      (locationController.longitude.value ?? widget.longitude) ?? 0.0,
+    );
     final LatLngBounds bounds = _createBounds(currentLatLng, projectLatLng);
     _mapController.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50));
   }
@@ -236,8 +256,8 @@ class _LocationWidgetState extends State<LocationWidget> {
               title: const Text(
                 'Project Location',
                 style: TextStyle(
-                  fontSize: 20.0, // Increased text size
-                  color: textBlack, // Changed text color to white
+                  fontSize: 20.0,
+                  color: textBlack,
                 ),
               ),
               elevation: 0, // Remove shadow to blend with green area
@@ -304,7 +324,9 @@ class _LocationWidgetState extends State<LocationWidget> {
                       children: [
                         GoogleMap(
                           initialCameraPosition: CameraPosition(
-                            target: _currentLocation != null ? _currentLocation!.split(', ').map(double.parse).toList().asMap().entries.map((e) => LatLng(e.value, e.value)).first : LatLng(widget.lattitude, widget.longitude),
+                            target: _currentLocation != null
+                                ? _currentLocation!.split(', ').map(double.parse).toList().asMap().entries.map((e) => LatLng(e.value, e.value)).first
+                                : LatLng(locationController.lattitude.value ?? widget.lattitude ?? 0.0, locationController.longitude.value ?? widget.longitude ?? 0.0),
                             zoom: 15,
                           ),
                           onMapCreated: (controller) {
@@ -317,20 +339,21 @@ class _LocationWidgetState extends State<LocationWidget> {
                                 markerId: const MarkerId('current_location'),
                                 position: _currentLocation!.split(', ').map(double.parse).toList().asMap().entries.map((e) => LatLng(e.value, e.value)).first,
                               ),
-                            Marker(
-                              markerId: const MarkerId('project_location'),
-                              position: LatLng(widget.lattitude, widget.longitude),
-                            ),
+                            if (locationController.lattitude.value != null && locationController.longitude.value != null)
+                              Marker(
+                                markerId: const MarkerId('project_location'),
+                                position: LatLng(locationController.lattitude.value!, locationController.longitude.value!),
+                              ),
                           },
                           polylines: _showDirection && _routePoints.isNotEmpty
                               ? {
-                                  Polyline(
-                                    polylineId: const PolylineId('route'),
-                                    points: _routePoints,
-                                    color: bgBlue,
-                                    width: 5,
-                                  ),
-                                }
+                            Polyline(
+                              polylineId: const PolylineId('route'),
+                              points: _routePoints,
+                              color: bgBlue,
+                              width: 5,
+                            ),
+                          }
                               : {},
                           myLocationEnabled: true,
                           myLocationButtonEnabled: true,

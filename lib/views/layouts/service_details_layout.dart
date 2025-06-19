@@ -118,7 +118,7 @@ class _ServiceDetailsLayoutState extends State<ServiceDetailsLayout>
                 controller: _tabController,
                 children: [
                   ProjectDetails(projectId: project!["project_id"]),
-                  ServiceSummery(),
+                  ServiceSummery(projectId: project!["project_id"]),
                   ServiceForm(
                     serviceId: widget.serviceId,
                     currentStep: currentStep,

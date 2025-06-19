@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -20,11 +22,11 @@ class _TechnicianFormWidgetState extends State<TechnicianFormWidget> {
     final serviceKey = 'service_${widget.serviceId}';
 
     // Read existing data or initialize a map
-    Map<String, dynamic> existingData = box.read(serviceKey) ?? {};
+    Map<String, dynamic> existingData = jsonDecode(box.read(serviceKey)) ?? {};
 
     existingData['technicians'] = technicians;
 
-    box.write(serviceKey, existingData);
+    box.write(serviceKey, jsonEncode(existingData));
   }
 
 
@@ -33,12 +35,19 @@ class _TechnicianFormWidgetState extends State<TechnicianFormWidget> {
     super.initState();
     final box = GetStorage();
     final serviceKey = 'service_${widget.serviceId}';
-    final serviceData = box.read(serviceKey);
 
-    if (serviceData != null && serviceData['technicians'] != null) {
-      technicians = List<String>.from(serviceData['technicians']);
+    final rawData = box.read(serviceKey);
+
+    // Check if null first
+    if (rawData != null) {
+      final serviceData = jsonDecode(rawData);
+
+      if (serviceData != null && serviceData['technicians'] != null) {
+        technicians = List<String>.from(serviceData['technicians']);
+      }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +72,7 @@ class _TechnicianFormWidgetState extends State<TechnicianFormWidget> {
               flex: 5,
               child: SizedBox(
                 height: 45,
-                child: TextField(
+                child: TextFormField(
                   controller: _name,
                   keyboardType: TextInputType.text,
                   onChanged: (value) {},
