@@ -38,3 +38,4 @@ flutter:
 
   assets:
     - lib/images/avLogo.png
+    - lib/images/profile.jpg
