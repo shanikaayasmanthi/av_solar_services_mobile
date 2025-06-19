@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -22,19 +24,26 @@ class _OutdoorWorkFormWidgetState extends State<OutdoorWorkFormWidget> {
     super.initState();
     final box = GetStorage();
     final serviceKey = 'service_${widget.serviceId}';
-    final serviceData = box.read(serviceKey);
+    final rawData = box.read(serviceKey);
 
-    if (serviceData != null && serviceData['outdoor_work'] != null) {
-      final data = serviceData['outdoor_work'];
+    // Check if null first
+    if (rawData != null) {
+      final serviceData = jsonDecode(rawData);
 
-      _cebExportController.text = data["cebExport"]["value"].toString();
-      _cebExportCommentController.text = data["cebExport"]["comment"];
-      _cebImportController.text = data["cebImport"]["value"].toString();
-      _cebImportCommentController.text = data["cebImport"]["comment"];
-      _groundResistanceController.text = data["groundResistance"]["value"].toString();
-      _groundResistanceCommentController.text = data["groundResistance"]["comment"];
-      earthRod = data["earthRod"]["checked"];
-      _earthRodController.text = data["earthRod"]["comment"];
+      if (serviceData != null && serviceData['outdoor_work'] != null) {
+        final data = serviceData['outdoor_work'];
+
+        _cebExportController.text = data["cebExport"]["value"].toString();
+        _cebExportCommentController.text = data["cebExport"]["comment"];
+        _cebImportController.text = data["cebImport"]["value"].toString();
+        _cebImportCommentController.text = data["cebImport"]["comment"];
+        _groundResistanceController.text =
+            data["groundResistance"]["value"].toString();
+        _groundResistanceCommentController.text =
+        data["groundResistance"]["comment"];
+        earthRod = data["earthRod"]["checked"];
+        _earthRodController.text = data["earthRod"]["comment"];
+      }
     }
   }
 
@@ -53,19 +62,19 @@ class _OutdoorWorkFormWidgetState extends State<OutdoorWorkFormWidget> {
     final serviceKey = 'service_${widget.serviceId}';
 
     // Read existing data
-    Map<String, dynamic> existingData = box.read(serviceKey) ?? {};
+    Map<String, dynamic> existingData = jsonDecode(box.read(serviceKey)) ?? {};
 
     existingData['outdoor_work'] = {
       "cebExport": {
-        "value": int.tryParse(_cebExportController.text) ?? 0,
+        "value": _cebExportController.text,
         "comment": _cebExportCommentController.text
       },
       "cebImport": {
-        "value": int.tryParse(_cebImportController.text) ?? 0,
+        "value": _cebImportController.text,
         "comment": _cebImportCommentController.text
       },
       "groundResistance": {
-        "value": int.tryParse(_groundResistanceController.text) ?? 0,
+        "value": _groundResistanceController.text,
         "comment": _groundResistanceCommentController.text
       },
       "earthRod": {
@@ -74,7 +83,7 @@ class _OutdoorWorkFormWidgetState extends State<OutdoorWorkFormWidget> {
       }
     };
 
-    box.write(serviceKey, existingData);
+    box.write(serviceKey, jsonEncode(existingData));
   }
 
 
@@ -107,7 +116,7 @@ class _OutdoorWorkFormWidgetState extends State<OutdoorWorkFormWidget> {
                     flex: 3,
                     child:  SizedBox(
                       height: 45,
-                      child: TextField(
+                      child: TextFormField(
                         controller: _cebExportController,
                         keyboardType: TextInputType.number,
                         onChanged: (value){
@@ -133,9 +142,9 @@ class _OutdoorWorkFormWidgetState extends State<OutdoorWorkFormWidget> {
                     flex: 5,
                     child:  SizedBox(
                       height: 45,
-                      child: TextField(
+                      child: TextFormField(
                         controller: _cebExportCommentController,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         onChanged: (value){
                           _saveOutdoorWorkLive();
                         } ,
@@ -175,7 +184,7 @@ class _OutdoorWorkFormWidgetState extends State<OutdoorWorkFormWidget> {
                 Expanded(
                   flex: 3,
                   child:
-                  TextField(
+                  TextFormField(
                     controller: _cebImportController,
                     keyboardType: TextInputType.number,
                     onChanged: (value){
@@ -199,9 +208,9 @@ class _OutdoorWorkFormWidgetState extends State<OutdoorWorkFormWidget> {
                     flex: 5,
                     child:  SizedBox(
                       height: 45,
-                      child: TextField(
+                      child: TextFormField(
                         controller: _cebImportCommentController,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         onChanged: (value){
                           _saveOutdoorWorkLive();
                         } ,
@@ -241,7 +250,7 @@ class _OutdoorWorkFormWidgetState extends State<OutdoorWorkFormWidget> {
                 Expanded(
                   flex: 3,
                   child:
-                  TextField(
+                  TextFormField(
                     controller: _groundResistanceController,
                     keyboardType: TextInputType.number,
                     onChanged: (value){
@@ -265,9 +274,9 @@ class _OutdoorWorkFormWidgetState extends State<OutdoorWorkFormWidget> {
                     flex: 5,
                     child:  SizedBox(
                       height: 45,
-                      child: TextField(
+                      child: TextFormField(
                         controller: _groundResistanceCommentController,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         onChanged: (value){
                           _saveOutdoorWorkLive();
                         } ,
@@ -322,9 +331,9 @@ class _OutdoorWorkFormWidgetState extends State<OutdoorWorkFormWidget> {
                     flex: 5,
                     child:  SizedBox(
                       height: 45,
-                      child: TextField(
+                      child: TextFormField(
                         controller: _earthRodController,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         onChanged: (value){
                           _saveOutdoorWorkLive();
                         } ,

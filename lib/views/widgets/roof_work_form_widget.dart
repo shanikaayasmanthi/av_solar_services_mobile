@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -23,28 +25,33 @@ class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
     final box = GetStorage();
     //load the roof work data
     final serviceKey = 'service_${widget.serviceId}';
-    final serviceData = box.read(serviceKey);
+    final rawData = box.read(serviceKey);
 
-    if (serviceData != null && serviceData['roof_work'] != null) {
-      final data = serviceData['roof_work'];
+    // Check if null first
+    if (rawData != null) {
+      final serviceData = jsonDecode(rawData);
 
-      //set roof data if exist
-      _cloudinessController.text = data["cloudiness"]["value"].toString();
-      _cloudinessCommentController.text = data["cloudiness"]["comment"];
-      panelService = data["panelService"]["checked"];
-      _panelServiceController.text = data["panelService"]["comment"];
-      structureService = data["structureService"]["checked"];
-      _structureServiceController.text = data["structureService"]["comment"];
-      nutnbolts = data["nutsBolts"]["checked"];
-      _nutnboltsController.text = data["nutsBolts"]["comment"];
-      shadow = data["shadow"]["checked"];
-      _shadowController.text = data["shadow"]["comment"];
-      panelmp4 = data["panelMp4"]["checked"];
-      _panelmp4Controller.text = data["panelMp4"]["comment"];
-      photos = data["photos"]["checked"];
-      _photosController.text = data["photos"]["comment"];
+      if (serviceData != null && serviceData['roof_work'] != null) {
+        final data = serviceData['roof_work'];
 
-      setState(() {});
+        //set roof data if exist
+        _cloudinessController.text = data["cloudiness"]["value"].toString();
+        _cloudinessCommentController.text = data["cloudiness"]["comment"];
+        panelService = data["panelService"]["checked"];
+        _panelServiceController.text = data["panelService"]["comment"];
+        structureService = data["structureService"]["checked"];
+        _structureServiceController.text = data["structureService"]["comment"];
+        nutnbolts = data["nutsBolts"]["checked"];
+        _nutnboltsController.text = data["nutsBolts"]["comment"];
+        shadow = data["shadow"]["checked"];
+        _shadowController.text = data["shadow"]["comment"];
+        panelmp4 = data["panelMp4"]["checked"];
+        _panelmp4Controller.text = data["panelMp4"]["comment"];
+        photos = data["photos"]["checked"];
+        _photosController.text = data["photos"]["comment"];
+
+        setState(() {});
+      }
     }
   }
 
@@ -69,7 +76,7 @@ class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
     final serviceKey = 'service_${widget.serviceId}';
 
     // Load existing service data if available
-    Map<String, dynamic> existingData = box.read(serviceKey) ?? {};
+    Map<String, dynamic> existingData = jsonDecode(box.read(serviceKey)) ?? {};
 
     // Update the roof work section
     existingData['roof_work'] = {
@@ -104,7 +111,7 @@ class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
     };
 
     // Save the full service structure back to storage
-    box.write(serviceKey, existingData);
+    box.write(serviceKey, jsonEncode(existingData));
   }
 
 
@@ -136,11 +143,17 @@ class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
               children: [
                 Expanded(
                   flex: 3,
-                  child:  SizedBox(
-                    height: 45,
-                    child: TextField(
+                    child: TextFormField(
                       controller: _cloudinessController,
                       keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Required*";
+                        }else if(int.tryParse(value)!<0||int.tryParse(value)!>10){
+                          return "Invalid Reading";
+                        }else{
+                        return null;}
+                      },
                       onChanged: (value){
                         _saveRoofDataLive();
                       } ,
@@ -157,16 +170,13 @@ class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
                         ),
                       ),
                     ),
-                  )
-                ),
+                  ),
                 const SizedBox(width: 15,),
                 Expanded(
                     flex: 5,
-                    child:  SizedBox(
-                      height: 45,
-                      child: TextField(
+                      child: TextFormField(
                         controller: _cloudinessCommentController,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         onChanged: (value){
                           _saveRoofDataLive();
                         } ,
@@ -183,7 +193,6 @@ class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
                           ),
                         ),
                       ),
-                    )
                 ),
               ],
             )
@@ -219,9 +228,7 @@ class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
                 const SizedBox(width: 15,),
                 Expanded(
                     flex: 5,
-                    child:  SizedBox(
-                      height: 45,
-                      child: TextField(
+                      child: TextFormField(
                         controller: _panelServiceController,
                         keyboardType: TextInputType.text,
                         onChanged: (value){
@@ -240,8 +247,7 @@ class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
                           ),
                         ),
                       ),
-                    )
-                ),
+                    ),
               ],
             )
           ],
@@ -278,9 +284,9 @@ class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
                     flex: 5,
                     child:  SizedBox(
                       height: 45,
-                      child: TextField(
+                      child: TextFormField(
                         controller: _structureServiceController,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         onChanged: (value){
                           _saveRoofDataLive();
                         } ,
@@ -335,9 +341,9 @@ class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
                     flex: 5,
                     child:  SizedBox(
                       height: 45,
-                      child: TextField(
+                      child: TextFormField(
                         controller: _nutnboltsController,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         onChanged: (value){
                           _saveRoofDataLive();
                         } ,
@@ -392,9 +398,9 @@ class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
                     flex: 5,
                     child:  SizedBox(
                       height: 45,
-                      child: TextField(
+                      child: TextFormField(
                         controller: _shadowController,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         onChanged: (value){
                           _saveRoofDataLive();
                         } ,
@@ -449,9 +455,9 @@ class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
                     flex: 5,
                     child:  SizedBox(
                       height: 45,
-                      child: TextField(
+                      child: TextFormField(
                         controller: _panelmp4Controller,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         onChanged: (value){
                           _saveRoofDataLive();
                         } ,
@@ -506,9 +512,9 @@ class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
                     flex: 5,
                     child:  SizedBox(
                       height: 45,
-                      child: TextField(
+                      child: TextFormField(
                         controller: _photosController,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         onChanged: (value){
                           _saveRoofDataLive();
                         } ,

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
 import 'package:av_solar_services/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -14,36 +17,47 @@ class AcDcFormWidget extends StatefulWidget {
 }
 
 class _AcDcFormWidgetState extends State<AcDcFormWidget> {
-
-  void _loadACDC(){
+  void _loadACDC() {
     final box = GetStorage();
     final serviceKey = 'service_${widget.serviceId}';
-    final data = box.read(serviceKey);
+    final rawData = box.read(serviceKey);
 
-    if (data != null) {
-      final dc = data['dc'] ?? {};
-      final ac = data['ac'] ?? {};
+    // Check if null first
+    if (rawData != null) {
+      final data = jsonDecode(rawData);
 
-      void _populate(List<TextEditingController> controllers, List<dynamic>? values) {
-        for (int i = 0; i < controllers.length && values != null && i < values.length; i++) {
-          controllers[i].text = values[i] ?? '';
+      if (data != null) {
+        final dc = data['dc'] ?? {};
+        final ac = data['ac'] ?? {};
+
+        void _populate(List<TextEditingController> controllers,
+            List<dynamic>? values) {
+          for (int i = 0; i < controllers.length && values != null &&
+              i < values.length; i++) {
+            controllers[i].text = (values[i] ?? '').toString();
+          }
         }
+
+
+        _populate(_dcOCVoltageControllers, dc['OCVoltage']);
+        _populate(_dcLoadVoltageControllers, dc['LoadVoltage']);
+        _populate(_dcLoadCurrentControllers, dc['LoadCurrent']);
+
+        _populate(_acOCVoltageControllers, ac['OCVoltage']);
+        _populate(_acLoadVoltageControllers, ac['LoadVoltage']);
+        _populate(_acLoadCurrentControllers, ac['LoadCurrent']);
       }
-
-      _populate(_dcOCVoltageControllers, dc['OCVoltage']);
-      _populate(_dcLoadVoltageControllers, dc['LoadVoltage']);
-      _populate(_dcLoadCurrentControllers, dc['LoadCurrent']);
-
-      _populate(_acOCVoltageControllers, ac['OCVoltage']);
-      _populate(_acLoadVoltageControllers, ac['LoadVoltage']);
-      _populate(_acLoadCurrentControllers, ac['LoadCurrent']);
     }
   }
 
   void _loadMainData() {
     final box = GetStorage();
     final serviceKey = 'service_${widget.serviceId}';
-    final data = box.read(serviceKey);
+    final rawData = box.read(serviceKey);
+
+    // Check if null first
+    if (rawData != null) {
+      final data = jsonDecode(rawData);
 
     if (data != null && data['mainData'] != null) {
       final mainData = data['mainData'];
@@ -56,7 +70,7 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
       setState(() {}); // Update UI if using checkbox state
     }
   }
-
+    }
 
   @override
   void initState() {
@@ -76,7 +90,6 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
     _loadACDC();
     _loadMainData();
   }
-
 
   final TextEditingController _longitudeController = TextEditingController();
   final TextEditingController _latitudeController = TextEditingController();
@@ -113,7 +126,10 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
     final box = GetStorage();
     final serviceKey = 'service_${widget.serviceId}';
 
-    Map<String, dynamic> existingData = box.read(serviceKey) ?? {};
+    final rawData = box.read(serviceKey);
+    final Map<String, dynamic> existingData = rawData != null
+        ? jsonDecode(rawData) as Map<String, dynamic>
+        : {};
 
     existingData['mainData'] = {
       "longitude": _longitudeController.text.trim(),
@@ -124,19 +140,25 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
       "electricityBill": electricitybill,
     };
 
-    box.write(serviceKey, existingData);
-    debugPrint("Saved mainData: ${existingData['mainData']}");
+    box.write(serviceKey, jsonEncode(existingData));
+    // debugPrint("Saved mainData: ${existingData['mainData']}");
   }
 
 
-  void _saveACDCLive(){
+  void _saveACDCLive() {
     final box = GetStorage();
     final serviceKey = 'service_${widget.serviceId}';
-    final Map<String, dynamic> existingData = box.read(serviceKey) ?? {};
 
-    // Helper to convert list of controllers to string list
-    List<String> _extractValues(List<TextEditingController> controllers) {
-      return controllers.map((controller) => controller.text.trim()).toList();
+    final rawData = box.read(serviceKey);
+    final Map<String, dynamic> existingData = rawData != null
+        ? jsonDecode(rawData) as Map<String, dynamic>
+        : {};
+
+    // Helper to convert list of controllers to list of double
+    List<double> _extractValues(List<TextEditingController> controllers) {
+      return controllers
+          .map((controller) => double.tryParse(controller.text.trim()) ?? 0.0)
+          .toList();
     }
 
     existingData['dc'] = {
@@ -151,16 +173,30 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
       "LoadCurrent": _extractValues(_acLoadCurrentControllers),
     };
 
-    box.write(serviceKey, existingData);
-    debugPrint("Saved Voltage/Current Data: ${box.read(serviceKey)}");
+    box.write(serviceKey, jsonEncode(existingData));
+
+    final savedRawData = box.read(serviceKey);
+    final savedData = savedRawData != null
+        ? jsonDecode(savedRawData)
+        : {};
+
+    debugPrint("Saved Voltage/Current Data: $savedData");
   }
+// Create formatter for HH:mm:ss
+  final timeFormatter = MaskTextInputFormatter(
+      mask: '##:##:##',
+      filter: { "#": RegExp(r'[0-9]') },
+      type: MaskAutoCompletionType.lazy
+  );
+
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Center(   // Only the title is centered
+        const Center(
+          // Only the title is centered
           child: Text(
             "Service Details",
             style: TextStyle(
@@ -171,14 +207,13 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
           ),
         ),
         const SizedBox(height: 10),
-
         const SizedBox(height: 10),
         Row(
           children: [
             Expanded(
                 child: SizedBox(
               height: 45,
-              child: TextField(
+              child: TextFormField(
                 controller: _longitudeController,
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
@@ -202,8 +237,8 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
             Expanded(
                 child: SizedBox(
               height: 45,
-              child: TextField(
-                onChanged: (value){
+              child: TextFormField(
+                onChanged: (value) {
                   _saveMainDataLive();
                 },
                 controller: _latitudeController,
@@ -228,14 +263,18 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
         Row(
           children: [
             Expanded(
-                child: SizedBox(
-              height: 45,
-              child: TextField(
-                onChanged: (value){
+              child: TextFormField(
+                onChanged: (value) {
                   _saveMainDataLive();
                 },
                 controller: _powerController,
                 keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Required*";
+                  }
+                  return null;
+                },
                 decoration: InputDecoration(
                   hintText: "Power",
                   hintStyle: const TextStyle(color: textGrey),
@@ -249,31 +288,41 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
                   ),
                 ),
               ),
-            )),
+            ),
             const SizedBox(width: 10),
             Expanded(
-                child: SizedBox(
-              height: 45,
-              child: TextField(
-                onChanged: (value){
-                  _saveMainDataLive();
-                  },
+              child: TextFormField(
                 controller: _timeController,
-                keyboardType: TextInputType.datetime,
+                keyboardType: TextInputType.number,
+                inputFormatters: [timeFormatter],
+                onChanged: (value) {
+                  _saveMainDataLive();
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Required*";
+                  }
+                  // Optional: Validate correct time format
+                  final timeRegEx = RegExp(r'^\d{2}:\d{2}:\d{2}$');
+                  if (!timeRegEx.hasMatch(value)) {
+                    return "Invalid format (hh:mm:ss)";
+                  }
+                  return null;
+                },
                 decoration: InputDecoration(
-                  hintText: "Time",
+                  hintText: "HH:mm:ss",
                   hintStyle: const TextStyle(color: textGrey),
                   fillColor: bgGrey,
                   filled: true,
                   contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide.none,
                   ),
                 ),
               ),
-            )),
+            ),
           ],
         ),
         const SizedBox(
@@ -344,8 +393,8 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
                 return SizedBox(
                   width: 80,
                   height: 40,
-                  child: TextField(
-                    onChanged: (value){
+                  child: TextFormField(
+                    onChanged: (value) {
                       _saveACDCLive();
                     },
                     controller: _dcOCVoltageControllers[index],
@@ -390,8 +439,8 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
                 return SizedBox(
                   width: 80,
                   height: 40,
-                  child: TextField(
-                    onChanged: (value){
+                  child: TextFormField(
+                    onChanged: (value) {
                       _saveACDCLive();
                     },
                     controller: _dcLoadVoltageControllers[index],
@@ -436,8 +485,8 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
                 return SizedBox(
                   width: 80,
                   height: 40,
-                  child: TextField(
-                    onChanged: (value){
+                  child: TextFormField(
+                    onChanged: (value) {
                       _saveACDCLive();
                     },
                     controller: _dcLoadCurrentControllers[index],
@@ -481,8 +530,9 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
                 return SizedBox(
                   width: 80,
                   height: 40,
-                  child: TextField(
+                  child: TextFormField(
                     controller: _acOCVoltageControllers[index],
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: _acVoltageLabels[index],
                       filled: true,
@@ -523,11 +573,12 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
                 return SizedBox(
                   width: 80,
                   height: 40,
-                  child: TextField(
-                    onChanged: (value){
+                  child: TextFormField(
+                    onChanged: (value) {
                       _saveACDCLive();
                     },
                     controller: _acLoadVoltageControllers[index],
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: _acVoltageLabels[index],
                       filled: true,
@@ -567,11 +618,12 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
                 return SizedBox(
                   width: 80,
                   height: 40,
-                  child: TextField(
-                    onChanged: (value){
+                  child: TextFormField(
+                    onChanged: (value) {
                       _saveACDCLive();
-                      },
+                    },
                     controller: _acLoadCurrentControllers[index],
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: _acVoltageLabels[index],
                       filled: true,
