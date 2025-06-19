@@ -51,13 +51,12 @@ class MyApp extends StatelessWidget {
       // GetPage(name: '/main', page: () => const MainLayout()),
         GetPage(name: '/sup', page: () => const SupLayout()),
         GetPage(
-                    name: '/location',
-                    page: () {
-                        // Added: Handle potential null arguments with a default projectId
-                        final args = Get.arguments as Map<String, dynamic>? ?? {'projectId': 0};
-                        return LocationScreen(projectId: args['projectId'] as int);
-                    },
-                ),
+             name: '/location',
+             page: () {
+              final args = Get.arguments as Map<String, dynamic>;
+              return LocationScreen(projectId: args['projectId']);
+             },
+        ),
       ],
        //home:Login()
     );

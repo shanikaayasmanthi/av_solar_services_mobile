@@ -1,13 +1,18 @@
+import 'package:av_solar_services/controllers/services.dart';
 import 'package:av_solar_services/views/widgets/ac_dc_form_widget.dart';
 import 'package:av_solar_services/views/widgets/mainpanel_work_form_widget.dart';
 import 'package:av_solar_services/views/widgets/outdoor_work_form_widget.dart';
 import 'package:av_solar_services/views/widgets/roof_work_form_widget.dart';
 import 'package:av_solar_services/views/widgets/technician_form_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:get/get.dart';
 
-class ServiceForm extends StatelessWidget {
+import '../../controllers/sup_page.dart';
+
+class ServiceForm extends StatefulWidget {
   final int currentStep;
-  final Function(int) onStepChanged;//callback function for set the current step of service form
+  final Function(int) onStepChanged;
   final int serviceId;
 
   const ServiceForm({
@@ -18,22 +23,49 @@ class ServiceForm extends StatelessWidget {
   });
 
   @override
+  State<ServiceForm> createState() => _ServiceFormState();
+}
+
+class _ServiceFormState extends State<ServiceForm> {
+  final box = GetStorage();
+  final _formKeys = List.generate(6, (index) => GlobalKey<FormState>());
+  final ServicesController _servicesController = Get.put(ServicesController());
+  var formResult;
+
+  @override
   Widget build(BuildContext context) {
     return Stepper(
       type: StepperType.horizontal,
       steps: getSteps(),
-      currentStep: currentStep,
-      onStepContinue: () {
-        final lastStep = currentStep == getSteps().length - 1;
-        if (!lastStep) {
-          onStepChanged(currentStep + 1);
+      currentStep: widget.currentStep,
+      onStepContinue: () async {
+        final lastStep = widget.currentStep == getSteps().length - 1;
+        final formState = _formKeys[widget.currentStep].currentState;
+
+        if (formState != null && formState.validate()) {
+          if (!lastStep) {
+            widget.onStepChanged(widget.currentStep + 1);
+          } else {
+            final result = await _servicesController.submitServiceForm(
+              serviceId: widget.serviceId,
+              userId: box.read('user')['id'],
+            );
+
+            if (result == 1) {
+              final SupervisorPageController supervisorController = Get.find();
+              supervisorController.goToHome(); // navigate to home page
+            }
+
+            debugPrint(widget.serviceId.toString());
+            debugPrint("Form complete, submitting data...");
+          }
         } else {
-          // Submit form
+          debugPrint("Validation failed on Step ${widget.currentStep + 1}");
         }
       },
       onStepCancel: () {
-        if (currentStep > 0) {
-          onStepChanged(currentStep - 1);
+        if (widget.currentStep > 0) {
+          widget.onStepChanged(widget.currentStep - 1);
         }
       },
     );
@@ -41,50 +73,49 @@ class ServiceForm extends StatelessWidget {
 
   List<Step> getSteps() => [
     Step(
-      state: currentStep > 0 ? StepState.complete : StepState.indexed,
-      isActive: currentStep >= 0,
+      state: widget.currentStep > 0 ? StepState.complete : StepState.indexed,
+      isActive: widget.currentStep >= 0,
       title: const Text("1"),
-      content: AcDcFormWidget(
-        serviceId: serviceId,
+      content: Form(
+        key: _formKeys[0],
+        child: AcDcFormWidget(serviceId: widget.serviceId),
       ),
     ),
     Step(
-      state: currentStep > 1 ? StepState.complete : StepState.indexed,
-      isActive: currentStep >= 1,
+      state: widget.currentStep > 1 ? StepState.complete : StepState.indexed,
+      isActive: widget.currentStep >= 1,
       title: const Text("2"),
-      content: RoofWorkFormWidget(
-        serviceId: serviceId,
+      content: Form(
+        key: _formKeys[1],
+        child: RoofWorkFormWidget(serviceId: widget.serviceId),
       ),
     ),
     Step(
-      state: currentStep > 2 ? StepState.complete : StepState.indexed,
-      isActive: currentStep >= 2,
+      state: widget.currentStep > 2 ? StepState.complete : StepState.indexed,
+      isActive: widget.currentStep >= 2,
       title: const Text("3"),
-      content: OutdoorWorkFormWidget(
-        serviceId: serviceId,
+      content: Form(
+        key: _formKeys[2],
+        child: OutdoorWorkFormWidget(serviceId: widget.serviceId),
       ),
     ),
     Step(
-        state: currentStep > 3 ? StepState.complete : StepState.indexed,
-        isActive: currentStep >= 3,
-        title: const Text("4"),
-        content: MainpanelWorkFormWidget(
-          serviceId: serviceId,
-        )
+      state: widget.currentStep > 3 ? StepState.complete : StepState.indexed,
+      isActive: widget.currentStep >= 3,
+      title: const Text("4"),
+      content: Form(
+        key: _formKeys[3],
+        child: MainpanelWorkFormWidget(serviceId: widget.serviceId),
+      ),
     ),
     Step(
-        state: currentStep > 4 ? StepState.complete : StepState.indexed,
-        isActive: currentStep >= 4,
-        title: const Text("5"),
-        content: TechnicianFormWidget(
-          serviceId: serviceId,
-        )
-    ),
-    Step(
-        state: currentStep > 5 ? StepState.complete : StepState.indexed,
-        isActive: currentStep >= 5,
-        title: const Text("6"),
-        content: const Text("6")
+      state: widget.currentStep > 4 ? StepState.complete : StepState.indexed,
+      isActive: widget.currentStep >= 4,
+      title: const Text("5"),
+      content: Form(
+        key: _formKeys[4],
+        child: TechnicianFormWidget(serviceId: widget.serviceId),
+      ),
     ),
   ];
 }

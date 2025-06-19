@@ -1,4 +1,3 @@
-// In av_solar_services/methods/api.dart
 import 'dart:convert';
 import 'package:av_solar_services/constants/base_url.dart';
 import 'package:http/http.dart' as http;

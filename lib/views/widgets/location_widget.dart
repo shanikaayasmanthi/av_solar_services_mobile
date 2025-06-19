@@ -139,9 +139,9 @@ class _LocationWidgetState extends State<LocationWidget> {
                 _showDirection = true; // Enable direction display
                 // Enhanced distance extraction with detailed debugging
                 print('Routes: ${data['routes']?.length}, Legs: ${data['routes']?[0]['legs']?.length}');
-                if (data['routes'] != null && data['routes'].isNotEmpty && 
+                if (data['routes'] != null && data['routes'].isNotEmpty &&
                     data['routes'][0]['legs'] != null && data['routes'][0]['legs'].isNotEmpty &&
-                    data['routes'][0]['legs'][0]['distance'] != null && 
+                    data['routes'][0]['legs'][0]['distance'] != null &&
                     data['routes'][0]['legs'][0]['distance']['text'] != null) {
                   _distance = data['routes'][0]['legs'][0]['distance']['text'];
                   print('Distance extracted: $_distance');
@@ -347,13 +347,13 @@ class _LocationWidgetState extends State<LocationWidget> {
                           },
                           polylines: _showDirection && _routePoints.isNotEmpty
                               ? {
-                                  Polyline(
-                                    polylineId: const PolylineId('route'),
-                                    points: _routePoints,
-                                    color: bgBlue,
-                                    width: 5,
-                                  ),
-                                }
+                            Polyline(
+                              polylineId: const PolylineId('route'),
+                              points: _routePoints,
+                              color: bgBlue,
+                              width: 5,
+                            ),
+                          }
                               : {},
                           myLocationEnabled: true,
                           myLocationButtonEnabled: true,

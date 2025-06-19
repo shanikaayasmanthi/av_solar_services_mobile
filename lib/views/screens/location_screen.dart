@@ -34,35 +34,35 @@ class _LocationScreenState extends State<LocationScreen> {
       backgroundColor: bgWhite,
       body: SafeArea(
         child: Obx(() => Stack(
-              children: [
-                if (locationController.lattitude.value != null &&
-                    locationController.longitude.value != null)
-                  LocationWidget(
-                    lattitude: locationController.lattitude.value!,
-                    longitude: locationController.longitude.value!,
-                    onOpenGoogleMaps: () async {
-                      final googleMapsUrl =
-                          'https://www.google.com/maps/search/?api=1&query=${locationController.lattitude.value},${locationController.longitude.value}';
-                      if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
-                        await launchUrl(
-                          Uri.parse(googleMapsUrl),
-                          mode: LaunchMode.externalApplication,
-                        );
-                      } else {
-                        locationController.showSnackBar(
-                            "Could not launch Google Maps.");
-                      }
-                    },
-                  ),
-                if (locationController.result.value != null)
-                  Center(
-                    child: Text(
-                      locationController.result.value!,
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  ),
-              ],
-            )),
+          children: [
+            if (locationController.lattitude.value != null &&
+                locationController.longitude.value != null)
+              LocationWidget(
+                lattitude: locationController.lattitude.value!,
+                longitude: locationController.longitude.value!,
+                onOpenGoogleMaps: () async {
+                  final googleMapsUrl =
+                      'https://www.google.com/maps/search/?api=1&query=${locationController.lattitude.value},${locationController.longitude.value}';
+                  if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+                    await launchUrl(
+                      Uri.parse(googleMapsUrl),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  } else {
+                    locationController.showSnackBar(
+                        "Could not launch Google Maps.");
+                  }
+                },
+              ),
+            if (locationController.result.value != null)
+              Center(
+                child: Text(
+                  locationController.result.value!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+          ],
+        )),
       ),
     );
   }
