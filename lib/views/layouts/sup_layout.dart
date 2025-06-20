@@ -182,7 +182,7 @@ class _SupLayoutState extends State<SupLayout> {
                         onServiceContinueTap:
                             pageController.openServiceDetails);
                   case 1:
-                    return const Profile();
+                    return Profile();
                   case 2:
                     return ServiceDetailsLayout(
                         serviceId:

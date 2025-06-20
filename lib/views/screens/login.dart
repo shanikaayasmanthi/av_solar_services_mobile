@@ -16,6 +16,7 @@ class _LoginState extends State<Login>{
   final TextEditingController _passwordController = TextEditingController();
 
   final AuthenticationController _authenticationController = Get.put(AuthenticationController());
+  bool obscurePassword =false;
 
 
   @override
@@ -46,7 +47,7 @@ class _LoginState extends State<Login>{
                       TextField(
                         controller: _usernameController,
                         decoration: InputDecoration(
-                            hintText: "username",
+                            labelText: "username",
                             hintStyle: const TextStyle(color: textGrey),
                             filled: true,
                             fillColor: bgGrey,
@@ -74,9 +75,18 @@ class _LoginState extends State<Login>{
                       //password
                       TextField(
                         controller: _passwordController,
-                        obscureText: true,
+                        obscureText: obscurePassword,
                         decoration: InputDecoration(
-                          hintText: "password",
+                          suffixIcon: IconButton(onPressed: (){
+                            setState(() {
+                              obscurePassword = !obscurePassword;
+                            });
+                          }, icon: Icon(
+                            obscurePassword? Icons.visibility_off:Icons.visibility,
+                            color: textGrey,
+                            size: 16,
+                          )),
+                          labelText: "password",
                           hintStyle: const TextStyle(color: textGrey),
                           filled: true,
                           fillColor: bgGrey,
