@@ -44,7 +44,7 @@ class _ServiceSummeryState extends State<ServiceSummery> {
       padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: bgGrey,
-        border: Border.all(color: textGreen, width: 2.0),
+        border: Border.all(color: bgLightGreen, width: 2.0),
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(
