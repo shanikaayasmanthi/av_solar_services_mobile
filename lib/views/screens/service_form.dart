@@ -1,3 +1,4 @@
+import 'package:av_solar_services/constants/colors.dart';
 import 'package:av_solar_services/controllers/services.dart';
 import 'package:av_solar_services/views/widgets/ac_dc_form_widget.dart';
 import 'package:av_solar_services/views/widgets/mainpanel_work_form_widget.dart';
@@ -51,6 +52,11 @@ class _ServiceFormState extends State<ServiceForm> {
               userId: box.read('user')['id'],
             );
             debugPrint("Submit result: $result");
+            Get.snackbar("${_servicesController.result.value.toString()}","",
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: bgLightGreen,
+              colorText: textBlack
+            );
             if (result == true) {
               debugPrint("Form complete, submitting data...");
               final SupervisorPageController supervisorController = Get.find();

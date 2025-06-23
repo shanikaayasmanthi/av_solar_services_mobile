@@ -224,6 +224,7 @@ class ServicesController extends GetxController {
       );
 
       if (response.statusCode == 200) {
+        result.value = "Form Successfully Submitted.";
         debugPrint(response.body);
         box.remove(serviceKey);
         return true;
@@ -232,7 +233,7 @@ class ServicesController extends GetxController {
         result.value = "Unauthorised Access";
         return false;
       } else {
-        result.value = "Server Error!";
+        result.value = "Server Error! Try Again";
         debugPrint("500");
         debugPrint('${response.body}');
         return false;
