@@ -86,6 +86,7 @@ class AuthenticationController extends GetxController {
       }
 
     }catch(e){
+      isLoading.value = false;
       print('Error$e');
       result.value = 'Check your connection';
     }

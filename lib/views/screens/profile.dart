@@ -38,19 +38,30 @@ class _ProfileState extends State<Profile> {
                       bottom: 0,
                       right: 4,
                       child: Container(
+                        width: 40, // smaller width
+                        height: 40, // smaller height
                         decoration: BoxDecoration(
                           color: bgGreen,
                           shape: BoxShape.circle,
                           border: Border.all(color: textWhite, width: 2),
                         ),
-                        padding: const EdgeInsets.all(6),
-                        child: const Icon(
-                          Icons.camera_alt,
-                          color: textWhite,
-                          size: 18,
+                        padding: const EdgeInsets.all(4), // smaller padding
+                        child: IconButton(
+                          onPressed: () {
+
+                          },
+                          icon: Icon(
+                            Icons.camera_alt,
+                            color: textWhite,
+                            size: 18,
+                          ),
+                          iconSize: 18, // also can control icon size
+                          padding: EdgeInsets.zero, // remove default IconButton padding
+                          constraints: BoxConstraints(), // shrink the IconButton
                         ),
                       ),
                     ),
+
                   ],
                 ),
                 const SizedBox(height: 12),

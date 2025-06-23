@@ -50,14 +50,15 @@ class _ServiceFormState extends State<ServiceForm> {
               serviceId: widget.serviceId,
               userId: box.read('user')['id'],
             );
-
-            if (result == 1) {
+            debugPrint("Submit result: $result");
+            if (result == true) {
+              debugPrint("Form complete, submitting data...");
               final SupervisorPageController supervisorController = Get.find();
-              supervisorController.goToHome(); // navigate to home page
+              supervisorController.closeServiceDetails();//close the service details page
             }
 
             debugPrint(widget.serviceId.toString());
-            debugPrint("Form complete, submitting data...");
+
           }
         } else {
           debugPrint("Validation failed on Step ${widget.currentStep + 1}");
