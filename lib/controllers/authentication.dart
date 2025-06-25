@@ -106,4 +106,51 @@ class AuthenticationController extends GetxController {
       }
     }catch(e){}
   }
+
+//change password
+  Future changePassword({
+    required int userId,
+    required String oldPassword,
+    required String newPassword,
+    required String confPassword
+  }) async {
+    try{
+      result.value = null;
+      isLoading.value = true;
+      var data ={
+        'user_id':userId,
+        'oldpassword':oldPassword,
+        'newpassword':newPassword,
+        'newpassword_confirmation':confPassword,
+      };
+      debugPrint(data.toString());
+      final response = await API().postRequest(route: '/change_password',
+      data: data,
+      token: box.read('token'));
+      final decoded = json.decode(response.body);
+      debugPrint("change");
+
+      debugPrint(decoded.toString());
+      isLoading.value = false;
+      if(response.statusCode == 200){
+        result.value = '${decoded["message"]}';
+        Future.delayed(Duration(seconds: 3), () {
+          result.value = null;
+        });
+        return true;
+      }else if(response.statusCode == 401){
+        result.value = '${decoded["message"]}';
+        return false;
+      }else{
+        result.value = '${decoded["message"]}';
+        return false;
+      }
+    }catch(e){
+      isLoading.value = false;
+      result.value = 'Server Error!';
+      return false;
+    }
+  }
+
 }
+
