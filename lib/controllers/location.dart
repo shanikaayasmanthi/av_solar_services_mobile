@@ -57,7 +57,7 @@ class LocationController extends GetxController {
     }
   } catch (e) {
     result.value = 'Error: ${e.toString()}';
-    // You might want to log the error for debugging
+
     debugPrint('Error fetching location: $e');
   } finally {
     isLoading.value = false;

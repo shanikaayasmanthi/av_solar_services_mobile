@@ -328,52 +328,55 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
         const SizedBox(
           height: 10,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const SizedBox(width: 10),
-                const Text(
-                  'Wifi Connectivity',
-                  style: TextStyle(fontSize: 16),
-                ),
-                const SizedBox(width: 10),
-                Checkbox(
-                  tristate: true, // Example with tristate
-                  value: wifiConnectivity,
-                  onChanged: (bool? newValue) {
-                    setState(() {
-                      wifiConnectivity = newValue;
-                    });
-                    _saveMainDataLive();
-                  },
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const SizedBox(width: 10),
-                const Text(
-                  'Electricity bill',
-                  style: TextStyle(fontSize: 16),
-                ),
-                const SizedBox(width: 10),
-                Checkbox(
-                  tristate: true, // Example with tristate
-                  value: electricitybill,
-                  onChanged: (bool? newValue) {
-                    setState(() {
-                      electricitybill = newValue;
-                    });
-                    _saveMainDataLive();
-                  },
-                ),
-              ],
-            ),
-          ],
+     Wrap(
+  spacing: 20,
+  runSpacing: 0,
+  crossAxisAlignment: WrapCrossAlignment.center,
+  
+  children: [
+    Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text(
+          'Wifi Connectivity',
+          style: TextStyle(fontSize: 16),
         ),
+        const SizedBox(width: 10),
+        Checkbox(
+          tristate: true,
+          value: wifiConnectivity,
+          onChanged: (bool? newValue) {
+            setState(() {
+              wifiConnectivity = newValue;
+            });
+            _saveMainDataLive();
+          },
+        ),
+      ],
+    ),
+    Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text(
+          'Electricity bill',
+          style: TextStyle(fontSize: 16),
+        ),
+        const SizedBox(width: 10),
+        Checkbox(
+          tristate: true,
+          value: electricitybill,
+          onChanged: (bool? newValue) {
+            setState(() {
+              electricitybill = newValue;
+            });
+            _saveMainDataLive();
+          },
+        ),
+      ],
+    ),
+  ],
+),
+
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

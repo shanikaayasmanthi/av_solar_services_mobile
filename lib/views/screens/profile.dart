@@ -22,7 +22,7 @@ class _ProfileState extends State<Profile> {
             children: [
               Stack(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 90,
                     backgroundImage: AssetImage(
                         'lib/images/profile.jpg'),
