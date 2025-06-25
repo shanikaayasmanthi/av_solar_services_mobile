@@ -59,33 +59,33 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
     if (rawData != null) {
       final data = jsonDecode(rawData);
 
-    if (data != null && data['mainData'] != null) {
-      final mainData = data['mainData'];
-      _longitudeController.text = mainData['longitude'] ?? '';
-      _latitudeController.text = mainData['latitude'] ?? '';
-      _powerController.text = mainData['power'] ?? '';
-      _timeController.text = mainData['time'] ?? '';
-      wifiConnectivity = mainData['wifiConnectivity'];
-      electricitybill = mainData['electricityBill'];
-      setState(() {}); // Update UI if using checkbox state
+      if (data != null && data['mainData'] != null) {
+        final mainData = data['mainData'];
+        _longitudeController.text = mainData['longitude'] ?? '';
+        _latitudeController.text = mainData['latitude'] ?? '';
+        _powerController.text = mainData['power'] ?? '';
+        _timeController.text = mainData['time'] ?? '';
+        wifiConnectivity = mainData['wifiConnectivity'];
+        electricitybill = mainData['electricityBill'];
+        setState(() {}); // Update UI if using checkbox state
+      }
     }
   }
-    }
 
   @override
   void initState() {
     super.initState();
     _acLoadCurrentControllers = List.generate(
       _acLoadCurrentLabels.length,
-      (_) => TextEditingController(),
+          (_) => TextEditingController(),
     );
     _acLoadVoltageControllers = List.generate(
       _acVoltageLabels.length,
-      (_) => TextEditingController(),
+          (_) => TextEditingController(),
     );
     _acOCVoltageControllers = List.generate(
       _acVoltageLabels.length,
-      (_) => TextEditingController(),
+          (_) => TextEditingController(),
     );
     _loadACDC();
     _loadMainData();
@@ -114,11 +114,11 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
   late final List<TextEditingController> _acLoadVoltageControllers;
   late final List<TextEditingController> _acLoadCurrentControllers;
   final List<TextEditingController> _dcOCVoltageControllers =
-      List.generate(8, (_) => TextEditingController());
+  List.generate(8, (_) => TextEditingController());
   final List<TextEditingController> _dcLoadVoltageControllers =
-      List.generate(8, (_) => TextEditingController());
+  List.generate(8, (_) => TextEditingController());
   final List<TextEditingController> _dcLoadCurrentControllers =
-      List.generate(8, (_) => TextEditingController());
+  List.generate(8, (_) => TextEditingController());
   bool? wifiConnectivity = false;
   bool? electricitybill = false;
 
@@ -212,51 +212,51 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
           children: [
             Expanded(
                 child: SizedBox(
-              height: 45,
-              child: TextFormField(
-                controller: _longitudeController,
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  _saveMainDataLive();
-                },
-                decoration: InputDecoration(
-                  hintText: "Longitude",
-                  hintStyle: const TextStyle(color: textGrey),
-                  fillColor: bgGrey,
-                  filled: true,
-                  contentPadding:
+                  height: 45,
+                  child: TextFormField(
+                    controller: _longitudeController,
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      _saveMainDataLive();
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Longitude",
+                      hintStyle: const TextStyle(color: textGrey),
+                      fillColor: bgGrey,
+                      filled: true,
+                      contentPadding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide.none,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )),
+                )),
             const SizedBox(width: 10),
             Expanded(
                 child: SizedBox(
-              height: 45,
-              child: TextFormField(
-                onChanged: (value) {
-                  _saveMainDataLive();
-                },
-                controller: _latitudeController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: "Latitude",
-                  hintStyle: const TextStyle(color: textGrey),
-                  fillColor: bgGrey,
-                  filled: true,
-                  contentPadding:
+                  height: 45,
+                  child: TextFormField(
+                    onChanged: (value) {
+                      _saveMainDataLive();
+                    },
+                    controller: _latitudeController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      hintText: "Latitude",
+                      hintStyle: const TextStyle(color: textGrey),
+                      fillColor: bgGrey,
+                      filled: true,
+                      contentPadding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide.none,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )),
+                )),
           ],
         ),
         const SizedBox(height: 10),
@@ -281,7 +281,7 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
                   fillColor: bgGrey,
                   filled: true,
                   contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide.none,
@@ -328,54 +328,54 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
         const SizedBox(
           height: 10,
         ),
-     Wrap(
-  spacing: 20,
-  runSpacing: 0,
-  crossAxisAlignment: WrapCrossAlignment.center,
-  
-  children: [
-    Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Text(
-          'Wifi Connectivity',
-          style: TextStyle(fontSize: 16),
+        Wrap(
+          spacing: 20,
+          runSpacing: 0,
+          crossAxisAlignment: WrapCrossAlignment.center,
+
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Wifi Connectivity',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(width: 10),
+                Checkbox(
+                  tristate: true,
+                  value: wifiConnectivity,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      wifiConnectivity = newValue;
+                    });
+                    _saveMainDataLive();
+                  },
+                ),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Electricity bill',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(width: 10),
+                Checkbox(
+                  tristate: true,
+                  value: electricitybill,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      electricitybill = newValue;
+                    });
+                    _saveMainDataLive();
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
-        const SizedBox(width: 10),
-        Checkbox(
-          tristate: true,
-          value: wifiConnectivity,
-          onChanged: (bool? newValue) {
-            setState(() {
-              wifiConnectivity = newValue;
-            });
-            _saveMainDataLive();
-          },
-        ),
-      ],
-    ),
-    Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Text(
-          'Electricity bill',
-          style: TextStyle(fontSize: 16),
-        ),
-        const SizedBox(width: 10),
-        Checkbox(
-          tristate: true,
-          value: electricitybill,
-          onChanged: (bool? newValue) {
-            setState(() {
-              electricitybill = newValue;
-            });
-            _saveMainDataLive();
-          },
-        ),
-      ],
-    ),
-  ],
-),
 
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -438,7 +438,7 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
               spacing: 10,
               runSpacing: 10,
               children:
-                  List.generate(_dcLoadVoltageControllers.length, (index) {
+              List.generate(_dcLoadVoltageControllers.length, (index) {
                 return SizedBox(
                   width: 80,
                   height: 40,
@@ -484,7 +484,7 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
               spacing: 10,
               runSpacing: 10,
               children:
-                  List.generate(_dcLoadCurrentControllers.length, (index) {
+              List.generate(_dcLoadCurrentControllers.length, (index) {
                 return SizedBox(
                   width: 80,
                   height: 40,
@@ -572,7 +572,7 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
               spacing: 10,
               runSpacing: 10,
               children:
-                  List.generate(_acLoadVoltageControllers.length, (index) {
+              List.generate(_acLoadVoltageControllers.length, (index) {
                 return SizedBox(
                   width: 80,
                   height: 40,

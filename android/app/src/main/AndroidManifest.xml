@@ -7,7 +7,7 @@
     <application
         android:label="av_solar_services"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
 
         <meta-data
         android:name="flutter.embedding.android.SurfaceView"
