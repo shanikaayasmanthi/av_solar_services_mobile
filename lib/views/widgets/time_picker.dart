@@ -31,23 +31,31 @@ class _TimePickerState extends State<TimePicker> {
   var timeFormat = "AM";
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: const EdgeInsets.symmetric(horizontal: 40,vertical: 30),
-      child: Column(
-        children: [
+
+  final screenWidth = MediaQuery.of(context).size.width;
+  final screenHeight = MediaQuery.of(context).size.height;
+
+
+    return SafeArea(
+  child: SingleChildScrollView(
+    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1, vertical: screenHeight * 0.05),
+    child: Column(
+      mainAxisSize: MainAxisSize.min, // <- Important for bottom sheets
+      children: [
           Row(
             children: [
               Text("Project No : ${widget.projectNo}",
-              style: const TextStyle(
+              style: TextStyle(
                 color: textBlack,
                 fontWeight: FontWeight.bold,
-                fontSize: 19
+                fontSize: screenWidth * 0.05
 
               ),),
             ],
           ),
-          const SizedBox(height: 20,),
+          SizedBox(height: screenHeight * 0.02,),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.01),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -57,15 +65,15 @@ class _TimePickerState extends State<TimePicker> {
                     value: hour,
                     zeroPad: true,
                     infiniteLoop: true,
-                    itemWidth: 80,
-                    itemHeight: 60,
-                    textStyle: const TextStyle(
+                    itemWidth: screenWidth * 0.1,
+                    itemHeight: screenHeight * 0.08,
+                    textStyle: TextStyle(
                       color: textGrey,
-                      fontSize: 20
+                      fontSize: screenWidth * 0.05
                     ),
-                    selectedTextStyle: const TextStyle(
+                    selectedTextStyle: TextStyle(
                       color: textBlack,
-                      fontSize: 30
+                      fontSize: screenWidth * 0.075
                     ),
                     onChanged: (value){
                       setState(() {
@@ -89,15 +97,15 @@ class _TimePickerState extends State<TimePicker> {
                   value: minute,
                   zeroPad: true,
                   infiniteLoop: true,
-                  itemWidth: 80,
-                  itemHeight: 60,
-                  textStyle: const TextStyle(
+                  itemWidth: screenWidth * 0.1,
+                  itemHeight: screenHeight * 0.08,
+                  textStyle: TextStyle(
                       color: textGrey,
-                      fontSize: 20
+                      fontSize: screenWidth * 0.05
                   ),
-                  selectedTextStyle: const TextStyle(
+                  selectedTextStyle: TextStyle(
                       color: textBlack,
-                      fontSize: 30
+                      fontSize: screenWidth * 0.075
                   ),
                   onChanged: (value){
                     setState(() {
@@ -124,9 +132,9 @@ class _TimePickerState extends State<TimePicker> {
                         });
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5
+                        padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.02,
+                            vertical: screenHeight * 0.01
                         ),
                         decoration: BoxDecoration(
                           color: timeFormat=="AM"?bgGrey:bgWhite,
@@ -137,11 +145,11 @@ class _TimePickerState extends State<TimePicker> {
                         child: Text("AM",
                           style: TextStyle(
                               color: timeFormat=="AM"?textBlack:textGrey,
-                              fontSize: 24
+                              fontSize: screenWidth * 0.06
                           ),),
                       ),
                     ),
-                    const SizedBox(height: 15,),
+                    SizedBox(height: screenHeight * 0.015,),
                     GestureDetector(
                       onTap: (){
                         setState(() {
@@ -149,9 +157,9 @@ class _TimePickerState extends State<TimePicker> {
                         });
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5
+                        padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.02,
+                            vertical: screenHeight * 0.01
                         ),
                         decoration: BoxDecoration(
                           color:  timeFormat=="PM"?bgGrey:bgWhite,
@@ -162,7 +170,7 @@ class _TimePickerState extends State<TimePicker> {
                         child: Text("PM",
                           style: TextStyle(
                               color: timeFormat=="PM"?textBlack:textGrey,
-                              fontSize: 24
+                              fontSize: screenWidth * 0.06
                           ),),
                       ),
                     ),
@@ -175,8 +183,8 @@ class _TimePickerState extends State<TimePicker> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} $timeFormat",
-              style: const TextStyle(
-                fontSize: 19,
+              style: TextStyle(
+                fontSize: screenWidth * 0.05,
                 color: textGrey
               ),)
             ],
@@ -192,7 +200,7 @@ class _TimePickerState extends State<TimePicker> {
     )
     :const SizedBox.shrink();
           }),
-          const SizedBox(height: 20,),
+          SizedBox(height: screenHeight * 0.02,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -239,7 +247,7 @@ class _TimePickerState extends State<TimePicker> {
           )
         ],
       ),
-
+     ),
     );
   }
 }

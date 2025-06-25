@@ -37,6 +37,8 @@ class _SupLayoutState extends State<SupLayout> {
 
   @override
   Widget build(BuildContext context) {
+final screenHeight = MediaQuery.of(context).size.height;
+
     final box = GetStorage();
     var token = box.read('token'); //user token
     final userMap = box.read('user'); //user details
@@ -97,7 +99,7 @@ class _SupLayoutState extends State<SupLayout> {
                       },
                       icon: const Icon(
                         Icons.logout_rounded,
-                        color: textWhite,
+                        color: textRed,
                         size: 22,
                       ),
                     )
@@ -148,8 +150,8 @@ class _SupLayoutState extends State<SupLayout> {
             decoration: const BoxDecoration(
               color: bgGreen,
             ),
-            child: const SizedBox(
-              height: 50,
+            child: SizedBox(
+              height: screenHeight*0.03,
             ),
           ),
         ),
