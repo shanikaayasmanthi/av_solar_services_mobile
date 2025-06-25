@@ -19,10 +19,10 @@ class SupLayout extends StatefulWidget {
 class _SupLayoutState extends State<SupLayout> {
   //page controller for supervisor
   final SupervisorPageController pageController =
-      Get.put(SupervisorPageController());
+  Get.put(SupervisorPageController());
 
   final AuthenticationController _authenticationController =
-      Get.put(AuthenticationController());
+  Get.put(AuthenticationController());
 
   //variable declaration
   //user
@@ -37,6 +37,8 @@ class _SupLayoutState extends State<SupLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     final box = GetStorage();
     var token = box.read('token'); //user token
     final userMap = box.read('user'); //user details
@@ -97,7 +99,7 @@ class _SupLayoutState extends State<SupLayout> {
                       },
                       icon: const Icon(
                         Icons.logout_rounded,
-                        color: textWhite,
+                        color: textRed,
                         size: 22,
                       ),
                     )
@@ -148,8 +150,8 @@ class _SupLayoutState extends State<SupLayout> {
             decoration: const BoxDecoration(
               color: bgGreen,
             ),
-            child: const SizedBox(
-              height: 50,
+            child: SizedBox(
+              height: screenHeight*0.03,
             ),
           ),
         ),
@@ -180,13 +182,13 @@ class _SupLayoutState extends State<SupLayout> {
                   case 0:
                     return Home(
                         onServiceContinueTap:
-                            pageController.openServiceDetails);
+                        pageController.openServiceDetails);
                   case 1:
-                    return Profile();
+                    return const Profile();
                   case 2:
                     return ServiceDetailsLayout(
                         serviceId:
-                            pageController.selectedService.value);
+                        pageController.selectedService.value);
 
                   default:
                     return const Center(child: Text("Page not found"));
@@ -194,29 +196,29 @@ class _SupLayoutState extends State<SupLayout> {
               })),
         ]),
         bottomNavigationBar: Obx(() => BottomNavigationBar(
-              backgroundColor: bgGreen,
-              currentIndex: pageController.currentPage.value > 1
-                  ? 0
-                  : pageController.currentPage.value,
-              onTap: (index) {
-                if (index == 0) pageController.goToHome();
-                if (index == 1){
-                  pageController.goToProfile();
-                  setState(() {
-                    _isExpanded = false;
-                  });
-                }
-              },
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home, color: textWhite),
-                  label: "Home",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.account_circle, color: textWhite),
-                  label: "Profile",
-                ),
-              ],
-            )));
+          backgroundColor: bgGreen,
+          currentIndex: pageController.currentPage.value > 1
+              ? 0
+              : pageController.currentPage.value,
+          onTap: (index) {
+            if (index == 0) pageController.goToHome();
+            if (index == 1){
+              pageController.goToProfile();
+              setState(() {
+                _isExpanded = false;
+              });
+            }
+          },
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home, color: textWhite),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle, color: textWhite),
+              label: "Profile",
+            ),
+          ],
+        )));
   }
 }
