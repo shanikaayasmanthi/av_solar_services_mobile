@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class SupervisorPageController extends GetxController{
@@ -19,6 +20,7 @@ class SupervisorPageController extends GetxController{
   }
 
   void closeServiceDetails() {
+    debugPrint('done');
     currentPage.value = 0;
     selectedService.value =0;
   }

@@ -26,13 +26,13 @@ class Project{
       type: json['type'],
       noOfPanels: json['no_of_panels'],
       capacity: (json['panel_capacity'] as num).toDouble(),
-      serviceYears: json['service_years_in_agreement'],
-      serviceRounds: json['service_rounds_in_agreement'],
+      serviceYears: json['service_years_in_agreement']??null,
+      serviceRounds: json['service_rounds_in_agreement']??null,
       systemOn: json['system_on'] != null ? DateTime.tryParse(json['system_on']) : null,
       installationDate: json['project_installation_date'] != null
           ? DateTime.tryParse(json['project_installation_date'])
           : null,
-      remarks: json['remarks'],
+      remarks: json['remarks']??null,
     );
   }
 
