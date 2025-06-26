@@ -28,7 +28,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 Stack(
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 90,
                       backgroundImage: AssetImage('lib/images/profile.jpg'),
                     ),
@@ -48,14 +48,14 @@ class _ProfileState extends State<Profile> {
                           onPressed: () {
 
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.camera_alt,
                             color: textWhite,
                             size: 18,
                           ),
                           iconSize: 18, // also can control icon size
                           padding: EdgeInsets.zero, // remove default IconButton padding
-                          constraints: BoxConstraints(), // shrink the IconButton
+                          constraints: const BoxConstraints(), // shrink the IconButton
                         ),
                       ),
                     ),
@@ -80,7 +80,7 @@ class _ProfileState extends State<Profile> {
                 )
               ],
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             Container(
               margin: const EdgeInsets.all(10),
               child: Column(
@@ -97,13 +97,13 @@ class _ProfileState extends State<Profile> {
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       IconButton(
                           onPressed: () {
                             showModalBottomSheet(context: context, builder:(BuildContext context){
                               return Container(
-                                padding: EdgeInsets.all(20),
-                                child: Column(
+                                padding: const EdgeInsets.all(20),
+                                child: const Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Row(
@@ -132,28 +132,28 @@ class _ProfileState extends State<Profile> {
                   const SizedBox(
                     height: 10,
                   ),
-                  ProfileRowWidget(topic: "Email", data: "shanika@gmail.com"),
+                  const ProfileRowWidget(topic: "Email", data: "shanika@gmail.com"),
                   const SizedBox(
                     height: 10,
                   ),
-                  ProfileRowWidget(
+                  const ProfileRowWidget(
                     topic: "Phone No",
                     data: "0717168036",
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  ProfileRowWidget(
+                  const ProfileRowWidget(
                       topic: "Address",
                       data: "Kandewatta,Aluthgedara,Deeyagaha,Matara"),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Divider(
+                  const Divider(
                     color: textGrey,
                     thickness: 1,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   const Text(
@@ -163,16 +163,16 @@ class _ProfileState extends State<Profile> {
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("Change Password",
+                      const Text("Change Password",
                         style: TextStyle(color: textBlack,fontSize: 18,
                             fontWeight: FontWeight.bold),),
-                      SizedBox(width: 10,),
+                      const SizedBox(width: 10,),
                       IconButton(onPressed: (){
                         setState(() {
                           showChangePassword = !showChangePassword;
@@ -192,7 +192,7 @@ class _ProfileState extends State<Profile> {
                       //     ),))
                     ],
                   ),
-                  showChangePassword?ChangePasswordWidget():SizedBox.shrink(),
+                  showChangePassword?const ChangePasswordWidget():const SizedBox.shrink(),
                 ],
               ),
             )

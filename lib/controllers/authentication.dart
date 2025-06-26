@@ -134,7 +134,7 @@ class AuthenticationController extends GetxController {
       isLoading.value = false;
       if(response.statusCode == 200){
         result.value = '${decoded["message"]}';
-        Future.delayed(Duration(seconds: 3), () {
+        Future.delayed(const Duration(seconds: 3), () {
           result.value = null;
         });
         return true;

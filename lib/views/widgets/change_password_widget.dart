@@ -27,7 +27,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       decoration: BoxDecoration(
         border: Border.all(color: textGrey),
         borderRadius: BorderRadius.circular(20),
@@ -49,6 +49,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
                     if (value == null || value.isEmpty) {
                       return "Required*";
                     }
+                    return null;
                   },
                   onChanged: (value) {},
                   decoration: InputDecoration(
@@ -91,6 +92,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
                         return "New password should not same as current password";
                       }
                     }
+                    return null;
                   },
                   onChanged: (value) {},
                   decoration: InputDecoration(
@@ -132,6 +134,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
                         return "Doesn't match with above password";
                       }
                     }
+                    return null;
                   },
                   onChanged: (value) {},
                   decoration: InputDecoration(
@@ -183,7 +186,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
                     }),
                     Obx(() {
                       return _authenticationController.isLoading.value
-                          ? Center(
+                          ? const Center(
                               child: CircularProgressIndicator(),
                             )
                           : Center(
