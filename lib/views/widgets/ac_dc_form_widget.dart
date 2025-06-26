@@ -30,7 +30,7 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
         final dc = data['dc'] ?? {};
         final ac = data['ac'] ?? {};
 
-        void _populate(List<TextEditingController> controllers,
+        void populate(List<TextEditingController> controllers,
             List<dynamic>? values) {
           for (int i = 0; i < controllers.length && values != null &&
               i < values.length; i++) {
@@ -39,13 +39,13 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
         }
 
 
-        _populate(_dcOCVoltageControllers, dc['OCVoltage']);
-        _populate(_dcLoadVoltageControllers, dc['LoadVoltage']);
-        _populate(_dcLoadCurrentControllers, dc['LoadCurrent']);
+        populate(_dcOCVoltageControllers, dc['OCVoltage']);
+        populate(_dcLoadVoltageControllers, dc['LoadVoltage']);
+        populate(_dcLoadCurrentControllers, dc['LoadCurrent']);
 
-        _populate(_acOCVoltageControllers, ac['OCVoltage']);
-        _populate(_acLoadVoltageControllers, ac['LoadVoltage']);
-        _populate(_acLoadCurrentControllers, ac['LoadCurrent']);
+        populate(_acOCVoltageControllers, ac['OCVoltage']);
+        populate(_acLoadVoltageControllers, ac['LoadVoltage']);
+        populate(_acLoadCurrentControllers, ac['LoadCurrent']);
       }
     }
   }
@@ -155,22 +155,22 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
         : {};
 
     // Helper to convert list of controllers to list of double
-    List<double> _extractValues(List<TextEditingController> controllers) {
+    List<double> extractValues(List<TextEditingController> controllers) {
       return controllers
           .map((controller) => double.tryParse(controller.text.trim()) ?? 0.0)
           .toList();
     }
 
     existingData['dc'] = {
-      "OCVoltage": _extractValues(_dcOCVoltageControllers),
-      "LoadVoltage": _extractValues(_dcLoadVoltageControllers),
-      "LoadCurrent": _extractValues(_dcLoadCurrentControllers),
+      "OCVoltage": extractValues(_dcOCVoltageControllers),
+      "LoadVoltage": extractValues(_dcLoadVoltageControllers),
+      "LoadCurrent": extractValues(_dcLoadCurrentControllers),
     };
 
     existingData['ac'] = {
-      "OCVoltage": _extractValues(_acOCVoltageControllers),
-      "LoadVoltage": _extractValues(_acLoadVoltageControllers),
-      "LoadCurrent": _extractValues(_acLoadCurrentControllers),
+      "OCVoltage": extractValues(_acOCVoltageControllers),
+      "LoadVoltage": extractValues(_acLoadVoltageControllers),
+      "LoadCurrent": extractValues(_acLoadCurrentControllers),
     };
 
     box.write(serviceKey, jsonEncode(existingData));

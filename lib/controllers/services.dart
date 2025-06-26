@@ -18,7 +18,7 @@ class ServicesController extends GetxController{
   final box = GetStorage();
 
 
-  // Add this method to your ServicesController
+ //get completed services by project
   Future<List<CompletedService>> getCompletedServicesByProject({
     required int projectId,
   }) async {
@@ -231,7 +231,7 @@ Future getProjectDetails({
 
 
     }catch(e){
-      result.value="Error occurred ${e}";
+      result.value="Error occurred $e";
       return {};
     }
 }
@@ -241,7 +241,7 @@ Future submitServiceForm({
   required int userId,
 }) async{
     try{
-      String serviceKey = 'service_${serviceId}';
+      String serviceKey = 'service_$serviceId';
       var data ={
         "user_id" :userId,
         "service_id":serviceId,
