@@ -3,6 +3,7 @@ import 'package:av_solar_services/controllers/authentication.dart';
 import 'package:av_solar_services/views/layouts/service_details_layout.dart';
 import 'package:av_solar_services/views/screens/home.dart';
 import 'package:av_solar_services/views/screens/profile.dart';
+import 'package:av_solar_services/views/screens/summarize.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -184,8 +185,10 @@ class _SupLayoutState extends State<SupLayout> {
                         onServiceContinueTap:
                         pageController.openServiceDetails);
                   case 1:
-                    return const Profile();
+                    return const Summarize();
                   case 2:
+                    return const Profile();
+                  case 3:
                     return ServiceDetailsLayout(
                         serviceId:
                         pageController.selectedService.value);
@@ -197,12 +200,13 @@ class _SupLayoutState extends State<SupLayout> {
         ]),
         bottomNavigationBar: Obx(() => BottomNavigationBar(
           backgroundColor: bgGreen,
-          currentIndex: pageController.currentPage.value > 1
+          currentIndex: pageController.currentPage.value > 2
               ? 0
               : pageController.currentPage.value,
           onTap: (index) {
             if (index == 0) pageController.goToHome();
-            if (index == 1){
+            if(index == 1) pageController.goToSummarize();
+            if (index == 2){
               pageController.goToProfile();
               setState(() {
                 _isExpanded = false;
@@ -215,9 +219,14 @@ class _SupLayoutState extends State<SupLayout> {
               label: "Home",
             ),
             BottomNavigationBarItem(
+                icon: Icon(Icons.summarize , color: textWhite,),
+                label: "Overview"
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.account_circle, color: textWhite),
               label: "Profile",
             ),
+
           ],
         )));
   }

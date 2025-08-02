@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
-        android:label="av_solar_services"
+        android:label="AV Solar"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
 
