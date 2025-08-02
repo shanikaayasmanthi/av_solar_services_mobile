@@ -40,6 +40,7 @@ class _ServiceWidgetState extends State<ServiceWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return Container(
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(16),
@@ -80,6 +81,13 @@ class _ServiceWidgetState extends State<ServiceWidget> {
             widget.service.projectAddress,
             style: const TextStyle(fontSize: 13, color: textGrey),
           ),
+          if (widget.service.remark != null)
+            Text(
+              "${widget.service.remark}",
+              style: const TextStyle(fontSize: 13, color: textRed),
+            )
+          else
+            const SizedBox.shrink(),
           widget.service.serviceTime != null
               ? Container(
                   padding:
@@ -115,7 +123,8 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                         ElevatedButton(
                                             onPressed: () {
                                               Get.back();
-                                              widget.onContinue(widget.service.serviceId); //pass service id for continue the service
+                                              widget.onContinue(widget.service
+                                                  .serviceId); //pass service id for continue the service
                                             },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: bgGreen,
@@ -132,11 +141,15 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                         ElevatedButton(
                                             //get location for the project site
                                             onPressed: () {
-                                             Navigator.push(
-                                             context,
-                                             MaterialPageRoute(
-                                              builder: (context) => LocationScreen(projectId: widget.service.projectId),
-                                               ),
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      LocationScreen(
+                                                          projectId: widget
+                                                              .service
+                                                              .projectId),
+                                                ),
                                               );
                                             },
                                             style: ElevatedButton.styleFrom(
@@ -178,12 +191,12 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                 isScrollControlled: true,
                                 builder: (BuildContext context) {
                                   return SizedBox(
-                                      height: 450,
+                                      // height: 450,
                                       child: TimePicker(
-                                        projectNo: widget.service.projectNo,
-                                        serviceId: widget.service.serviceId,
-                                        projectId: widget.service.projectId,
-                                      ));
+                                    projectNo: widget.service.projectNo,
+                                    serviceId: widget.service.serviceId,
+                                    projectId: widget.service.projectId,
+                                  ));
                                 });
                             if (result == true) {
                               //callback
