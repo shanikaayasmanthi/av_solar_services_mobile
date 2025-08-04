@@ -10,13 +10,17 @@ class SupervisorPageController extends GetxController{
     currentPage.value = 0;
   }
 
-  void goToProfile() {
+  void goToSummarize(){
     currentPage.value = 1;
+  }
+
+  void goToProfile() {
+    currentPage.value = 2;
   }
 
   void openServiceDetails(int serviceId) {
     selectedService.value = serviceId;
-    currentPage.value = 2;
+    currentPage.value = 3;
   }
 
   void closeServiceDetails() {

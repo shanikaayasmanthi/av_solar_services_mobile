@@ -10,6 +10,7 @@ class Service {
   final String serviceType;
   final DateTime serviceDate;
   final String? serviceTime;
+  final String? remark;
 
   Service({
     required this.serviceId,
@@ -23,6 +24,7 @@ class Service {
     required this.serviceType,
     required this.serviceDate,
     this.serviceTime,
+    this.remark,
   });
 
   factory Service.fromJson(Map<String, dynamic> json) {
@@ -38,6 +40,7 @@ class Service {
       serviceType: json['service_type'],
       serviceDate: DateTime.parse(json['service_date']),
       serviceTime: json['service_time'],
+      remark: json['service_remark'],
     );
   }
 }

@@ -95,10 +95,10 @@ class _SolarPanelInfoCardState extends State<SolarPanelInfoCard> {
         "No of panels": project?.noOfPanels,
         "Panel capacity": "${project?.capacity} kW",
         "Electricity bill name":onGrid?.electricityBillName??'Not updated yet',
-        "Wifi username":onGrid?.wifiUsername??'Not updated yet',
-        "wifi password":onGrid?.wifiPassword??'Not updated yet',
+        "Portal username":onGrid?.wifiUsername??'Not updated yet',
+        "Portal password":onGrid?.wifiPassword??'Not updated yet',
         "Harmonic Meter":onGrid?.harmonicMeter??'Not Updated yet',
-        "System On":project?.systemOn??'Not updated yet',
+        "System On Date":project?.systemOn??'Not updated yet',
         "Installation Date":project?.installationDate??'Not updated yet',
         "Special note" : project?.remarks?? 'No special note',
         "remarks":onGrid?.remarks??'No remarks'
@@ -107,10 +107,10 @@ class _SolarPanelInfoCardState extends State<SolarPanelInfoCard> {
         "Project type": project?.type,
         "No of panels": project?.noOfPanels,
         "Panel capacity": "${project?.capacity} kW",
-        "Wifi username":offGridHybrid?.wifiUsername??'Not updated yet',
-        "Wifi password":offGridHybrid?.wifiPassword??'Not updated yet',
+        "Portal username":offGridHybrid?.wifiUsername??'Not updated yet',
+        "Portal password":offGridHybrid?.wifiPassword??'Not updated yet',
         "Connection Type":offGridHybrid?.connectionType??'Not updated yet',
-        "System On":project?.systemOn??'Not updated yet',
+        "System On Date":project?.systemOn??'Not updated yet',
         "Installation Date":project?.installationDate??'Not updated yet',
         "Special note" : project?.remarks?? 'No special note',
         "remarks":offGridHybrid?.remarks??'No remarks'
@@ -166,7 +166,7 @@ class _SolarPanelInfoCardState extends State<SolarPanelInfoCard> {
         ),
         const SizedBox(height: 10,),
         const Text("Solar Panel Details",style: TextStyle(color: textBlack,fontWeight: FontWeight.bold,fontSize: 18),),
-        Card(
+        solarPanels.isNotEmpty ? Card(
           margin: const EdgeInsets.all(5),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           elevation: 4,
@@ -222,66 +222,78 @@ class _SolarPanelInfoCardState extends State<SolarPanelInfoCard> {
               }).toList(),
             ),
           ),
+        ):const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            "No Solar Panel data available.",
+            style: TextStyle(color: textGrey, fontStyle: FontStyle.italic),
+          ),
         ),
         const SizedBox(height: 10,),
         const Text("Invertor Details",style: TextStyle(color: textBlack,fontWeight: FontWeight.bold,fontSize: 18),),
-        Card(
-          margin: const EdgeInsets.all(5),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          elevation: 4,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child:Column(
-              children: invertors.map((entry) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          entry.brand,
-                          style: const TextStyle(
-                            color: textGrey,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          entry.invertorCheckCode,
-                          style: const TextStyle(color: textGrey),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Text(
-                          entry.invertorModelCode,
-                          style: const TextStyle(color: textGrey),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          "${entry.capacity}kW",
-                          style: const TextStyle(color: textGrey),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: Text(
-                          entry.invertorSerialNo,
-                          style: const TextStyle(color: textGrey),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        ),
+       invertors.isNotEmpty ?  Card(
+         margin: const EdgeInsets.all(5),
+         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+         elevation: 4,
+         child: Padding(
+           padding: const EdgeInsets.all(16.0),
+           child:Column(
+             children: invertors.map((entry) {
+               return Padding(
+                 padding: const EdgeInsets.symmetric(vertical: 6.0),
+                 child: Row(
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   children: [
+                     Expanded(
+                       flex: 2,
+                       child: Text(
+                         entry.brand,
+                         style: const TextStyle(
+                           color: textGrey,
+                         ),
+                       ),
+                     ),
+                     Expanded(
+                       flex: 2,
+                       child: Text(
+                         entry.invertorCheckCode,
+                         style: const TextStyle(color: textGrey),
+                       ),
+                     ),
+                     Expanded(
+                       flex: 3,
+                       child: Text(
+                         entry.invertorModelCode,
+                         style: const TextStyle(color: textGrey),
+                       ),
+                     ),
+                     Expanded(
+                       flex: 1,
+                       child: Text(
+                         "${entry.capacity}kW",
+                         style: const TextStyle(color: textGrey),
+                       ),
+                     ),
+                     Expanded(
+                       flex: 4,
+                       child: Text(
+                         entry.invertorSerialNo,
+                         style: const TextStyle(color: textGrey),
+                       ),
+                     ),
+                   ],
+                 ),
+               );
+             }).toList(),
+           ),
+         ),
+       ): const Padding(
+         padding: EdgeInsets.all(8.0),
+         child: Text(
+           "No Solar Panel data available.",
+           style: TextStyle(color: textGrey, fontStyle: FontStyle.italic),
+         ),
+       ),
         const SizedBox(height: 10,),
         batteries.isNotEmpty?
         const Text("Battery Details",style: TextStyle(color: textBlack,fontWeight: FontWeight.bold,fontSize: 18),):const SizedBox.shrink(),
