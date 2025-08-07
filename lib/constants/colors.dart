@@ -7,6 +7,7 @@ const Color bgBlue = Color(0xFF3F68FF);
 const Color bgGreen = Color(0xFF069C88);
 const Color bgLightGreen = Color(0x4F069C88);
 const Color bgDarkGrey = Color(0xFFF5F5F5);
+const Color bgLightTeal = Color(0xFFE0F8EE);
 
 //text colors
 const Color textGrey = Color(0xFF757575);
@@ -15,6 +16,7 @@ const Color textBlue = Color(0xFF577EFD);
 const Color textGreen = Color(0xFF069C88);
 const Color textBlack = Color(0xFF000000);
 const Color textRed = Color(0xFFFF0101);
+const Color textLightGrey = Color(0xFFC0C0C0);
 
 
 
