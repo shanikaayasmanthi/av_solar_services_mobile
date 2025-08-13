@@ -65,8 +65,13 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
         _latitudeController.text = mainData['latitude'] ?? '';
         _powerController.text = mainData['power'] ?? '';
         _timeController.text = mainData['time'] ?? '';
-        wifiConnectivity = mainData['wifiConnectivity'];
-        electricitybill = mainData['electricityBill'];
+  wifiConnectivity = mainData['wifiConnectivity'] is int
+      ? mainData['wifiConnectivity'] == 1
+      : mainData['wifiConnectivity'] as bool?;
+
+  electricitybill = mainData['electricityBill'] is int
+      ? mainData['electricityBill'] == 1
+      : mainData['electricityBill'] as bool?;
         setState(() {}); // Update UI if using checkbox state
       }
     }

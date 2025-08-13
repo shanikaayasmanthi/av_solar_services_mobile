@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../controllers/sup_page.dart';
 import '../../models/User.dart';
+import 'package:av_solar_services/views/screens/service_form_to_edit.dart';
 
 class SupLayout extends StatefulWidget {
   const SupLayout({super.key});
@@ -50,7 +51,7 @@ class _SupLayoutState extends State<SupLayout> {
     // Map<String,String>user = box.read('user');
     // debugPrint(user as String);
     return Scaffold(
-        extendBodyBehindAppBar: true,
+        //extendBodyBehindAppBar: true,
         appBar: AppBar(
           toolbarHeight: _isExpanded ? 130 : 70,
           backgroundColor: bgLightGreen,
@@ -192,6 +193,15 @@ class _SupLayoutState extends State<SupLayout> {
                     return ServiceDetailsLayout(
                         serviceId:
                         pageController.selectedService.value);
+case 4:
+  return ServiceFormToEdit(
+    serviceId: pageController.selectedService.value,
+    currentStep: 0,
+    onStepChanged: (step) {},
+    serviceData: pageController.selectedServiceData, // optional if you store it
+  );
+
+                  
 
                   default:
                     return const Center(child: Text("Page not found"));

@@ -18,92 +18,129 @@ class _MainpanelWorkFormWidgetState extends State<MainpanelWorkFormWidget> {
   @override
   void initState() {
     super.initState();
-    final box = GetStorage();
-    final serviceKey =
-        'service_${widget.serviceId}'; //load existing data from get storage
-    final rawData = box.read(serviceKey);
+      _loadMainPanelData();
+}
 
-    // Check if null first
-    if (rawData != null) {
+void _loadMainPanelData() async {
+  final box = GetStorage();
+  final serviceKey = 'service_${widget.serviceId}';
+  
+  // Add delay to ensure data is saved
+  await Future.delayed(Duration(milliseconds: 100));
+
+  debugPrint('Loading main panel data for key: $serviceKey');
+  final rawData = box.read(serviceKey);
+  debugPrint('Raw storage data for main panel: $rawData');
+ 
+  // Check if null first
+  if (rawData != null) {
+    try {
       final serviceData = jsonDecode(rawData);
-      //set them in to controllers
-      if (serviceData != null && serviceData['mainpanel_work'] != null) {
-        final data = serviceData['mainpanel_work'];
+      debugPrint('Main panel data from storage: ${serviceData['main_panel_work']}');
 
-        _offlineGridVoltage.text = data['offlineGridVoltage']?['value'] ?? '';
-        _offlineGridVoltageComment.text =
-            data['offlineGridVoltage']?['comment'] ?? '';
+      if (serviceData['main_panel_work'] != null) {
+        final data = serviceData['main_panel_work'];
+        debugPrint('Complete main panel data: $data');
 
-        _onlineGridVoltage.text = data['onlineGridVoltage']?['value'] ?? '';
-        _onlineGridVoltageComment.text =
-            data['onlineGridVoltage']?['comment'] ?? '';
+        // Debug print the entire structure
+        debugPrint('Main Panel Work Data Structure:');
+        data.forEach((key, value) {
+          debugPrint('$key: ${value.toString()} (${value.runtimeType})');
+          if (value is Map) {
+            value.forEach((subKey, subValue) {
+              debugPrint('  $subKey: $subValue (${subValue.runtimeType})');
+            });
+          }
+        });
 
-        invertorService = data['invertorServiceFanTime']?['checked'] ?? false;
-        _invertorServiceComment.text =
-            data['invertorServiceFanTime']?['comment'] ?? '';
+        _offlineGridVoltage.text = data['offlineGridVoltage']?['value']?.toString() ?? '';
+        _offlineGridVoltageComment.text = data['offlineGridVoltage']?['comment']?.toString() ?? '';
 
-        breaker = data['breakerService']?['checked'] ?? false;
-        _breakerComment.text = data['breakerService']?['comment'] ?? '';
+        _onlineGridVoltage.text = data['onlineGridVoltage']?['value']?.toString() ?? '';
+        _onlineGridVoltageComment.text = data['onlineGridVoltage']?['comment']?.toString() ?? '';
 
-        dcSurgeArrestor = data['dcSurgeArrestors']?['checked'] ?? false;
-        _dcSurgeArrestorComment.text =
-            data['dcSurgeArrestors']?['comment'] ?? '';
+        invertorService = (data['invertorServiceFanTime']?['checked'] is int)
+            ? (data['invertorServiceFanTime']?['checked'] == 1)
+            : (data['invertorServiceFanTime']?['checked'] ?? false);
+        _invertorServiceComment.text = data['invertorServiceFanTime']?['comment']?.toString() ?? '';
 
-        acSurgeArrestor = data['acSurgeArrestors']?['checked'] ?? false;
-        _acSurgeArrestorComment.text =
-            data['acSurgeArrestors']?['comment'] ?? '';
+        breaker = (data['breakerService']?['checked'] is int)
+            ? (data['breakerService']?['checked'] == 1)
+            : (data['breakerService']?['checked'] ?? false);
+        _breakerComment.text = data['breakerService']?['comment']?.toString() ?? '';
 
-        invertorConnection = data['invertorConnection']?['checked'] ?? false;
-        _invertorConnectionComment.text =
-            data['invertorConnection']?['comment'] ?? '';
+        dcSurgeArrestor = (data['dcSurgeArrestors']?['checked'] is int)
+            ? (data['dcSurgeArrestors']?['checked'] == 1)
+            : (data['dcSurgeArrestors']?['checked'] ?? false);
+        _dcSurgeArrestorComment.text = data['dcSurgeArrestors']?['comment']?.toString() ?? '';
 
-        _lowVoltage.text = data['lowVoltageRange']?['value'] ?? '';
-        _lowVoltageComment.text = data['lowVoltageRange']?['comment'] ?? '';
+        acSurgeArrestor = (data['acSurgeArrestors']?['checked'] is int)
+            ? (data['acSurgeArrestors']?['checked'] == 1)
+            : (data['acSurgeArrestors']?['checked'] ?? false);
+        _acSurgeArrestorComment.text = data['acSurgeArrestors']?['comment']?.toString() ?? '';
 
-        _highVoltage.text = data['highVoltageRange']?['value'] ?? '';
-        _highVoltageComment.text = data['highVoltageRange']?['comment'] ?? '';
+        debugPrint('invertorConnection: ${data['invertorConnection']}');
+        invertorConnection = (data['invertorConnection']?['checked'] is int)
+            ? (data['invertorConnection']?['checked'] == 1)
+            : (data['invertorConnection']?['checked'] ?? false);
+        _invertorConnectionComment.text = data['invertorConnection']?['comment']?.toString() ?? '';
 
-        _lowFrequency.text = data['lowFrequencyRange']?['value'] ?? '';
-        _lowFrequencyComment.text = data['lowFrequencyRange']?['comment'] ?? '';
+        _lowVoltage.text = data['lowVoltageRange']?['value']?.toString() ?? '';
+        _lowVoltageComment.text = data['lowVoltageRange']?['comment']?.toString() ?? '';
 
-        _highFrequency.text = data['highFrequencyRange']?['value'] ?? '';
-        _highFrequencyComment.text =
-            data['highFrequencyRange']?['comment'] ?? '';
+        _highVoltage.text = data['highVoltageRange']?['value']?.toString() ?? '';
+        _highVoltageComment.text = data['highVoltageRange']?['comment']?.toString() ?? '';
 
-        _invertorSetupTime.text = data['invertorSetupTime']?['value'] ?? '';
-        _invertorSetupTimeComment.text =
-            data['invertorSetupTime']?['comment'] ?? '';
+        _lowFrequency.text = data['lowFrequencyRange']?['value']?.toString() ?? '';
+        _lowFrequencyComment.text = data['lowFrequencyRange']?['comment']?.toString() ?? '';
 
-        _eTodayInvertor.text = data['eTodayInvertor']?['value'] ?? '';
-        _eTodayInvertorComment.text = data['eTodayInvertor']?['comment'] ?? '';
+        _highFrequency.text = data['highFrequencyRange']?['value']?.toString() ?? '';
+        _highFrequencyComment.text = data['highFrequencyRange']?['comment']?.toString() ?? '';
 
-        _eTotalInvertor.text = data['eTotalInvertor']?['value'] ?? '';
-        _eTotalInvertorComment.text = data['eTotalInvertor']?['comment'] ?? '';
+        _invertorSetupTime.text = data['invertorSetupTime']?['value']?.toString() ?? '';
+        _invertorSetupTimeComment.text = data['invertorSetupTime']?['comment']?.toString() ?? '';
 
-        wifiConfig = data['wifiConfig']?['checked'] ?? false;
-        _wifiConfigComment.text = data['wifiConfig']?['comment'] ?? '';
+        _eTodayInvertor.text = data['eTodayInvertor']?['value']?.toString() ?? '';
+        _eTodayInvertorComment.text = data['eTodayInvertor']?['comment']?.toString() ?? '';
 
-        powerBulb = data['powerBulbBlinkingStyle']?['value'] ?? '';
-        _powerBulbComment.text =
-            data['powerBulbBlinkingStyle']?['comment'] ?? '';
+        _eTotalInvertor.text = data['eTotalInvertor']?['value']?.toString() ?? '';
+        _eTotalInvertorComment.text = data['eTotalInvertor']?['comment']?.toString() ?? '';
 
-        _wifiUsername.text = data['routerUsername']?['value'] ?? '';
-        _wifiUsernameComment.text = data['routerUsername']?['comment'] ?? '';
+        wifiConfig = (data['wifiConfig']?['checked'] is int)
+            ? (data['wifiConfig']?['checked'] == 1)
+            : (data['wifiConfig']?['checked'] ?? false);
+        _wifiConfigComment.text = data['wifiConfig']?['comment']?.toString() ?? '';
 
-        _wifiPassword.text = data['routerPassword']?['value'] ?? '';
-        _wifiPasswordComment.text = data['routerPassword']?['comment'] ?? '';
+        powerBulb = data['powerBulbBlinkingStyle']?['value']?.toString() ?? '';
+        _powerBulbComment.text = data['powerBulbBlinkingStyle']?['comment']?.toString() ?? '';
 
-        _routerSerialNo.text = data['routerSerialNo']?['value'] ?? '';
-        _routerSerialNoComment.text = data['routerSerialNo']?['comment'] ?? '';
+        _wifiUsername.text = data['routerUsername']?['value']?.toString() ?? '';
+        _wifiUsernameComment.text = data['routerUsername']?['comment']?.toString() ?? '';
 
-        avSticker = data['serviceAVSticker']?['checked'] ?? false;
-        _avStickerComment.text = data['serviceAVSticker']?['comment'] ?? '';
+        _wifiPassword.text = data['routerPassword']?['value']?.toString() ?? '';
+        _wifiPasswordComment.text = data['routerPassword']?['comment']?.toString() ?? '';
 
-        tookPhotos = data['tookPhotos']?['checked'] ?? false;
-        _tookPhotosComment.text = data['tookPhotos']?['comment'] ?? '';
+        _routerSerialNo.text = data['routerSerialNo']?['value']?.toString() ?? '';
+        _routerSerialNoComment.text = data['routerSerialNo']?['comment']?.toString() ?? '';
+
+        avSticker = (data['serviceAVSticker']?['checked'] is int)
+            ? (data['serviceAVSticker']?['checked'] == 1)
+            : (data['serviceAVSticker']?['checked'] ?? false);
+        _avStickerComment.text = data['serviceAVSticker']?['comment']?.toString() ?? '';
+
+        tookPhotos = (data['tookPhotos']?['checked'] is int)
+            ? (data['tookPhotos']?['checked'] == 1)
+            : (data['tookPhotos']?['checked'] ?? false);
+        _tookPhotosComment.text = data['tookPhotos']?['comment']?.toString() ?? '';
+        setState(() {});
       }
+    } catch (e) {
+      debugPrint('Error loading main panel data: $e');
     }
+  } else {
+    debugPrint('No data found in storage for key: $serviceKey');
   }
+}
 
   final TextEditingController _offlineGridVoltage = TextEditingController();
   final TextEditingController _offlineGridVoltageComment =
@@ -158,7 +195,7 @@ class _MainpanelWorkFormWidgetState extends State<MainpanelWorkFormWidget> {
 
     Map<String, dynamic> existingData = jsonDecode(box.read(serviceKey));
 
-    existingData['mainpanel_work'] = {
+    existingData['main_panel_work'] = {
       "offlineGridVoltage": {
         "value": _offlineGridVoltage.text,
         "comment": _offlineGridVoltageComment.text
@@ -184,11 +221,11 @@ class _MainpanelWorkFormWidgetState extends State<MainpanelWorkFormWidget> {
         "comment": _acSurgeArrestorComment.text
       },
       "invertorConnection": {
-        "checked": invertorService ?? false,
+        "checked": invertorConnection ?? false,
         "comment": _invertorConnectionComment.text
       },
       "lowVoltageRange": {
-        "value": _lowVoltageComment.text,
+        "value": _lowVoltage.text,
         "comment": _lowVoltageComment.text
       },
       "highVoltageRange": {
@@ -249,6 +286,9 @@ class _MainpanelWorkFormWidgetState extends State<MainpanelWorkFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+      final box = GetStorage();
+  final allKeys = box.getKeys();
+  debugPrint('All storage keys: $allKeys');
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -417,10 +457,10 @@ class _MainpanelWorkFormWidgetState extends State<MainpanelWorkFormWidget> {
                   flex: 3,
                   child: Checkbox(
                     tristate: true, // Example with tristate
-                    value: invertorService,
+                    value: invertorService ?? false,
                     onChanged: (bool? newValue) {
                       setState(() {
-                        invertorService = newValue;
+                        invertorService = newValue ?? false;
                       });
                       _saveMainPanelWorkLive();
                     },
@@ -476,10 +516,10 @@ class _MainpanelWorkFormWidgetState extends State<MainpanelWorkFormWidget> {
                   flex: 3,
                   child: Checkbox(
                     tristate: true, // Example with tristate
-                    value: breaker,
+                    value: breaker ?? false,
                     onChanged: (bool? newValue) {
                       setState(() {
-                        breaker = newValue;
+                        breaker = newValue ?? false;
                       });
                       _saveMainPanelWorkLive();
                     },
@@ -535,10 +575,10 @@ class _MainpanelWorkFormWidgetState extends State<MainpanelWorkFormWidget> {
                   flex: 3,
                   child: Checkbox(
                     tristate: true, // Example with tristate
-                    value: dcSurgeArrestor,
+                    value: dcSurgeArrestor ?? false,
                     onChanged: (bool? newValue) {
                       setState(() {
-                        dcSurgeArrestor = newValue;
+                        dcSurgeArrestor = newValue ?? false;
                       });
                       _saveMainPanelWorkLive();
                     },
@@ -594,10 +634,10 @@ class _MainpanelWorkFormWidgetState extends State<MainpanelWorkFormWidget> {
                   flex: 3,
                   child: Checkbox(
                     tristate: true, // Example with tristate
-                    value: acSurgeArrestor,
+                    value: acSurgeArrestor ?? false,
                     onChanged: (bool? newValue) {
                       setState(() {
-                        acSurgeArrestor = newValue;
+                        acSurgeArrestor = newValue ?? false;
                       });
                       _saveMainPanelWorkLive();
                     },
@@ -653,10 +693,10 @@ class _MainpanelWorkFormWidgetState extends State<MainpanelWorkFormWidget> {
                   flex: 3,
                   child: Checkbox(
                     tristate: true, // Example with tristate
-                    value: invertorConnection,
+                    value: invertorConnection ?? false,
                     onChanged: (bool? newValue) {
                       setState(() {
-                        invertorConnection = newValue;
+                        invertorConnection = newValue ?? false;
                       });
                       _saveMainPanelWorkLive();
                     },
@@ -1188,10 +1228,10 @@ class _MainpanelWorkFormWidgetState extends State<MainpanelWorkFormWidget> {
                   flex: 3,
                   child: Checkbox(
                     tristate: true, // Example with tristate
-                    value: wifiConfig,
+                    value: wifiConfig ?? false,
                     onChanged: (bool? newValue) {
                       setState(() {
-                        wifiConfig = newValue;
+                        wifiConfig = newValue ?? false;
                       });
                       _saveMainPanelWorkLive();
                     },
@@ -1248,26 +1288,22 @@ class _MainpanelWorkFormWidgetState extends State<MainpanelWorkFormWidget> {
                     child: SizedBox(
                       height: 45,
                       child: DropdownButton<String>(
-                        value: (powerBulb!=null || powerBulb!='')
-                            ? powerBulb
-                            : null, // <- handle null/empty
-                        hint: const Text("Select"),
-                        underline: null,
-                        items: <String>['Slow', 'Solid', 'Fast']
-                            .map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? value) {
-                          setState(() {
-                            powerBulb = value ??
-                                ''; // if value is null, set empty string
-                          });
-                          _saveMainPanelWorkLive();
-                        },
-                      ),
+  value: (powerBulb != null && powerBulb!.isNotEmpty) ? powerBulb : null,
+  hint: const Text("Select"),
+  underline: null,
+  items: <String>['Slow', 'Solid', 'Fast'].map((String value) {
+    return DropdownMenuItem<String>(
+      value: value,
+      child: Text(value),
+    );
+  }).toList(),
+  onChanged: (String? value) {
+    setState(() {
+      powerBulb = value ?? '';
+    });
+    _saveMainPanelWorkLive();
+  },
+),
                     )),
                 const SizedBox(
                   width: 15,
@@ -1523,10 +1559,10 @@ class _MainpanelWorkFormWidgetState extends State<MainpanelWorkFormWidget> {
                   flex: 3,
                   child: Checkbox(
                     tristate: true, // Example with tristate
-                    value: avSticker,
+                    value: avSticker ?? false,
                     onChanged: (bool? newValue) {
                       setState(() {
-                        avSticker = newValue;
+                        avSticker = newValue ?? false;
                       });
                       _saveMainPanelWorkLive();
                     },
@@ -1582,10 +1618,10 @@ class _MainpanelWorkFormWidgetState extends State<MainpanelWorkFormWidget> {
                   flex: 3,
                   child: Checkbox(
                     tristate: true, // Example with tristate
-                    value: tookPhotos,
+                    value: tookPhotos ?? false,
                     onChanged: (bool? newValue) {
                       setState(() {
-                        tookPhotos = newValue;
+                        tookPhotos = newValue ?? false;
                       });
                       _saveMainPanelWorkLive();
                     },

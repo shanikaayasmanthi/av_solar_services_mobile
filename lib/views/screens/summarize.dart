@@ -1,12 +1,15 @@
 import 'package:av_solar_services/constants/colors.dart';
 import 'package:av_solar_services/constants/base_url.dart';
+import 'package:av_solar_services/controllers/sup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get_storage/get_storage.dart';
+import 'package:get/get.dart';
 import 'package:av_solar_services/models/User.dart';
-import 'package:av_solar_services/views/screens/service_form.dart';
+
+
 
 class Summarize extends StatefulWidget {
   const Summarize({super.key});
@@ -145,94 +148,111 @@ class _SummarizeState extends State<Summarize> {
     }
   }
 
-  Future<Map<String, dynamic>?> fetchServiceDetails(int serviceId) async {
-    try {
-      final box = GetStorage();
-      final token = box.read('token');
-      
-      if (token == null) {
-        throw Exception('Token not found');
-      }
+Future<Map<String, dynamic>?> fetchServiceDetails(int serviceId) async {
+  try {
+    final box = GetStorage();
+    final token = box.read('token');
+    final userMap = box.read('user');
+    
+    if (token == null || userMap == null) {
+      debugPrint('Token or user data not found in GetStorage');
+      throw Exception('Authentication data not found');
+    }
 
-      final response = await http.get(
-        Uri.parse('$baseUrl/services/$serviceId'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
+    final user = User.fromJson(userMap);
+    
+    debugPrint('Making request to: $baseUrl/services/get-details-for-edit');
+    
+    final response = await http.post(
+      Uri.parse('$baseUrl/services/get-details-for-edit'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'service_id': serviceId,
+        'supervisor_id': user.id, // Add if needed by your backend
+      }),
+    );
 
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
+    debugPrint('Response status: ${response.statusCode}');
+    debugPrint('Response body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      if (responseData['status'] == 'success') {
         return responseData['data'];
       } else {
-        throw Exception('Failed to load service details: ${response.statusCode}');
+        debugPrint('API returned error: ${responseData['message']}');
+        throw Exception(responseData['message']);
       }
-    } catch (e) {
-      debugPrint('Error fetching service details: $e');
-      return null;
+    } else {
+      debugPrint('API error: ${response.statusCode}');
+      throw Exception('Failed to load service details: ${response.statusCode}');
     }
+  } catch (e, stackTrace) {
+    debugPrint('Error in fetchServiceDetails: $e');
+    debugPrint('Stack trace: $stackTrace');
+    return null;
   }
+}
 
-  Future<void> _navigateToServiceForm(int serviceId, BuildContext context) async {
-    // Show loading indicator
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
-    );
+Future<void> _navigateToServiceForm(int serviceId, BuildContext context) async {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => const Center(child: CircularProgressIndicator()),
+  );
+  
+  try {
+    debugPrint('Fetching service details for ID: $serviceId');
     
-    try {
-      // Fetch service details
-      final serviceDetails = await fetchServiceDetails(serviceId);
-      
-      // Close loading dialog
-      if (mounted) Navigator.of(context).pop();
-      
-      if (serviceDetails == null) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to load service details')),
-          );
-        }
-        return;
-      }
-
-      // Save the fetched data to GetStorage
-      final box = GetStorage();
-      final serviceKey = 'service_$serviceId';
-      await box.write(serviceKey, jsonEncode(serviceDetails));
-      
-      // Navigate to ServiceForm
-      if (mounted) {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ServiceForm(
-              serviceId: serviceId,
-              currentStep: 0,
-              onStepChanged: (step) {},
-            ),
-          ),
-        );
-        
-        // Refresh the data when returning from edit
-        fetchTodaySummary();
-        fetchTodayCompletedServices();
-      }
-    } catch (e) {
-      // Close loading dialog if still mounted
-      if (mounted) Navigator.of(context).pop();
-      
-      // Show error message
+    final serviceDetails = await fetchServiceDetails(serviceId);
+    
+    if (mounted) Navigator.of(context).pop();
+    
+    if (serviceDetails == null) {
+      debugPrint('Service details are null');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
+          const SnackBar(content: Text('Failed to load service details')),
         );
       }
-      debugPrint('Navigation error: $e');
+      return;
+    }
+
+    debugPrint('Service details fetched successfully');
+    
+    // Relax the validation since some fields might be null
+    if (serviceDetails['project'] == null) {
+      debugPrint('Missing project data in service details');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid service data format')),
+        );
+      }
+      return;
+    }
+
+if (mounted) {
+  final pageController = Get.find<SupervisorPageController>();
+  pageController.selectedServiceData.value = serviceDetails;
+  pageController.openEditServiceForm(serviceId);
+}
+
+  } catch (e, stackTrace) {
+    if (mounted) Navigator.of(context).pop();
+    
+    debugPrint('Error in _navigateToServiceForm: $e');
+    debugPrint('Stack trace: $stackTrace');
+    
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
     }
   }
+}
 
   Widget _buildSummaryCard() {
     if (isLoading) {

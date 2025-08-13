@@ -19,40 +19,67 @@ class RoofWorkFormWidget extends StatefulWidget {
 
 class _RoofWorkFormWidgetState extends State<RoofWorkFormWidget> {
 
-  @override
-  void initState() {
-    super.initState();
+      void _printDebugData() {
+    final box = GetStorage();
+    final serviceKey = 'service_${widget.serviceId}';
+    final rawData = box.read(serviceKey);
+    debugPrint('Roof work data from storage: $rawData');
+  }
+
+
+
+     void _loadInitialData() {  
     final box = GetStorage();
     //load the roof work data
     final serviceKey = 'service_${widget.serviceId}';
     final rawData = box.read(serviceKey);
 
+   debugPrint('Raw roof work data from storage: $rawData'); 
+
     // Check if null first
     if (rawData != null) {
-      final serviceData = jsonDecode(rawData);
+      try {
+        final serviceData = jsonDecode(rawData);
+        final roofData = serviceData['roof_work'] ?? {};
 
-      if (serviceData != null && serviceData['roof_work'] != null) {
-        final data = serviceData['roof_work'];
+        debugPrint('Parsed roof data: $roofData'); // Debug print
 
         //set roof data if exist
-        _cloudinessController.text = data["cloudiness"]["value"].toString();
-        _cloudinessCommentController.text = data["cloudiness"]["comment"];
-        panelService = data["panelService"]["checked"];
-        _panelServiceController.text = data["panelService"]["comment"];
-        structureService = data["structureService"]["checked"];
-        _structureServiceController.text = data["structureService"]["comment"];
-        nutnbolts = data["nutsBolts"]["checked"];
-        _nutnboltsController.text = data["nutsBolts"]["comment"];
-        shadow = data["shadow"]["checked"];
-        _shadowController.text = data["shadow"]["comment"];
-        panelmp4 = data["panelMp4"]["checked"];
-        _panelmp4Controller.text = data["panelMp4"]["comment"];
-        photos = data["photos"]["checked"];
-        _photosController.text = data["photos"]["comment"];
+      _cloudinessController.text = (roofData["cloudiness"]?["value"] ?? 0).toString();
+      _cloudinessCommentController.text = roofData["cloudiness"]?["comment"] ?? '';
+      
+      // Convert numeric values to boolean (0 = false, non-zero = true)
+      panelService = (roofData["panel_service"]?["value"] ?? 0) != 0;
+      _panelServiceController.text = roofData["panel_service"]?["comment"] ?? '';
+      
+      structureService = (roofData["structure_service"]?["value"] ?? 0) != 0;
+      _structureServiceController.text = roofData["structure_service"]?["comment"] ?? '';
+      
+      nutnbolts = (roofData["nut_bolt_condition"]?["value"] ?? 0) != 0;
+      _nutnboltsController.text = roofData["nut_bolt_condition"]?["comment"] ?? '';
+      
+      shadow = (roofData["shadow"]?["value"] ?? 0) != 0;
+      _shadowController.text = roofData["shadow"]?["comment"] ?? '';
+      
+      panelmp4 = (roofData["panel_MC4_condition"]?["value"] ?? 0) != 0;
+      _panelmp4Controller.text = roofData["panel_MC4_condition"]?["comment"] ?? '';
+      
+      photos = (roofData["took_photos"]?["value"] ?? 0) != 0;
+      _photosController.text = roofData["took_photos"]?["comment"] ?? '';
 
         setState(() {});
+        } catch (e) {
+        debugPrint('Error loading roof work data: $e');
       }
+    } else {
+      debugPrint('No data found in storage for key: $serviceKey');
     }
+  }
+    @override
+  void initState() {
+    super.initState();
+    _loadInitialData(); 
+     _printDebugData();
   }
 
 

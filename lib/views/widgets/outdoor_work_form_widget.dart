@@ -22,31 +22,50 @@ class _OutdoorWorkFormWidgetState extends State<OutdoorWorkFormWidget> {
   @override
   void initState() {
     super.initState();
+    _loadInitialData();
+  }
+
+  void _loadInitialData() {
     final box = GetStorage();
     final serviceKey = 'service_${widget.serviceId}';
     final rawData = box.read(serviceKey);
 
     // Check if null first
-    if (rawData != null) {
-      final serviceData = jsonDecode(rawData);
+        if (rawData != null) {
+          try {
+            final serviceData = jsonDecode(rawData);
+            final outdoorData = serviceData['outdoor_work'] ?? {};
 
-      if (serviceData != null && serviceData['outdoor_work'] != null) {
-        final data = serviceData['outdoor_work'];
+      debugPrint('Outdoor work data: $outdoorData'); // Debug print
 
-        _cebExportController.text = data["cebExport"]["value"].toString();
-        _cebExportCommentController.text = data["cebExport"]["comment"];
-        _cebImportController.text = data["cebImport"]["value"].toString();
-        _cebImportCommentController.text = data["cebImport"]["comment"];
-        _groundResistanceController.text =
-            data["groundResistance"]["value"].toString();
-        _groundResistanceCommentController.text =
-        data["groundResistance"]["comment"];
-        earthRod = data["earthRod"]["checked"];
-        _earthRodController.text = data["earthRod"]["comment"];
-      }
-    }
+          final cebExport = outdoorData["cebExport"] ?? {};
+      _cebExportController.text = cebExport["value"]?.toString() ?? '';
+      _cebExportCommentController.text = cebExport["comment"]?.toString() ?? '';
+      
+      final cebImport = outdoorData["cebImport"] ?? {};
+      _cebImportController.text = cebImport["value"]?.toString() ?? '';
+      _cebImportCommentController.text = cebImport["comment"]?.toString() ?? '';
+      
+      final groundResistance = outdoorData["groundResistance"] ?? {};
+      _groundResistanceController.text = groundResistance["value"]?.toString() ?? '';
+      _groundResistanceCommentController.text = groundResistance["comment"]?.toString() ?? '';
+      
+      final earthRodData = outdoorData["earthRod"] ?? {};
+      earthRod = earthRodData["checked"] is bool 
+          ? earthRodData["checked"] 
+          : earthRodData["checked"] == 1 || earthRodData["checked"] == true;
+      _earthRodController.text = earthRodData["comment"]?.toString() ?? '';
+
+
+              setState(() {});
+            
+          } catch (e) {
+            debugPrint('Error loading initial data: $e');
+          }
+        }
   }
-
+    
+    
 
   final TextEditingController _cebExportController = TextEditingController();
   final TextEditingController _cebExportCommentController = TextEditingController();
@@ -62,7 +81,17 @@ class _OutdoorWorkFormWidgetState extends State<OutdoorWorkFormWidget> {
     final serviceKey = 'service_${widget.serviceId}';
 
     // Read existing data
-    Map<String, dynamic> existingData = jsonDecode(box.read(serviceKey)) ?? {};
+    //Map<String, dynamic> existingData = jsonDecode(box.read(serviceKey)) ?? {};
+     Map<String, dynamic> existingData = {};
+
+    try {
+      final rawData = box.read(serviceKey);
+      if (rawData != null) {
+        existingData = jsonDecode(rawData);
+      }
+    } catch (e) {
+      debugPrint('Error reading existing data: $e');
+    }
 
     existingData['outdoor_work'] = {
       "cebExport": {
@@ -89,6 +118,10 @@ class _OutdoorWorkFormWidgetState extends State<OutdoorWorkFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+      debugPrint('Current outdoor values: '
+    'CEB Export: ${_cebExportController.text}, '
+    'CEB Import: ${_cebImportController.text}, '
+    'Earth Rod: $earthRod');
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
