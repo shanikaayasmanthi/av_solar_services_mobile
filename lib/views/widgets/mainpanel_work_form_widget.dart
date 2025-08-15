@@ -26,7 +26,7 @@ void _loadMainPanelData() async {
   final serviceKey = 'service_${widget.serviceId}';
   
   // Add delay to ensure data is saved
-  await Future.delayed(Duration(milliseconds: 100));
+  await Future.delayed(const Duration(milliseconds: 100));
 
   debugPrint('Loading main panel data for key: $serviceKey');
   final rawData = box.read(serviceKey);

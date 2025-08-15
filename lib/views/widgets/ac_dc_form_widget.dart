@@ -61,8 +61,8 @@ class _AcDcFormWidgetState extends State<AcDcFormWidget> {
 
       if (data != null && data['mainData'] != null) {
         final mainData = data['mainData'];
-        _longitudeController.text = mainData['longitude'] ?? '';
-        _latitudeController.text = mainData['latitude'] ?? '';
+        _longitudeController.text = (mainData['longitude'] ?? '').toString();
+        _latitudeController.text = (mainData['latitude'] ?? '').toString();
         _powerController.text = mainData['power'] ?? '';
         _timeController.text = mainData['time'] ?? '';
   wifiConnectivity = mainData['wifiConnectivity'] is int

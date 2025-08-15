@@ -379,9 +379,13 @@ class _ServiceFormToEditState extends State<ServiceFormToEdit> {
             color: textBlack,
           ),
           style: IconButton.styleFrom(
-            backgroundColor: bgLightGreen,
+            backgroundColor: bgGreen,
+            padding: const EdgeInsets.all(4.0),   
+            visualDensity: VisualDensity.compact,  
+           // minimumSize:const Size(40, 30),  
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
             ),
           ),
           onPressed: () {
@@ -390,10 +394,11 @@ class _ServiceFormToEditState extends State<ServiceFormToEdit> {
           },
         ),
         //centerTitle: true,
+        titleSpacing: 0,
         title: const Text(
           'Edit Service',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
