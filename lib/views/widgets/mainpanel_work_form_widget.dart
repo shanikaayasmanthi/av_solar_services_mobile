@@ -193,7 +193,18 @@ void _loadMainPanelData() async {
     final box = GetStorage();
     final serviceKey = 'service_${widget.serviceId}';
 
-    Map<String, dynamic> existingData = jsonDecode(box.read(serviceKey));
+    // Map<String, dynamic> existingData = jsonDecode(box.read(serviceKey));
+      final rawData = box.read(serviceKey);
+  Map<String, dynamic> existingData = {};
+
+  if (rawData != null) {
+    try {
+      existingData = jsonDecode(rawData) as Map<String, dynamic>;
+    } catch (e) {
+      debugPrint("Error decoding existing data: $e");
+      existingData = {};
+    }
+  }
 
     existingData['main_panel_work'] = {
       "offlineGridVoltage": {
@@ -257,7 +268,7 @@ void _loadMainPanelData() async {
         "comment": _wifiConfigComment.text
       },
       "powerBulbBlinkingStyle": {
-        "value": powerBulb.toString(),
+        "value": powerBulb?.toString() ?? "",
         "comment": _powerBulbComment.text,
       },
       "routerUsername": {
@@ -282,6 +293,7 @@ void _loadMainPanelData() async {
       }
     };
     box.write(serviceKey, jsonEncode(existingData));
+    debugPrint("✅ Saved main panel data: ${existingData['main_panel_work']}");
   }
 
   @override
