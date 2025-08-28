@@ -277,7 +277,7 @@ if (mounted) {
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-      color: bgLightTeal,
+      color: bgGrey,
       elevation: 6,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),

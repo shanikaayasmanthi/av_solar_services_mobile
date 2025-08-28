@@ -188,7 +188,7 @@ class _SupLayoutState extends State<SupLayout> {
                   case 1:
                     return const Summarize();
                   case 2:
-                    return const Profile();
+                    return Profile(userId: user.id);
                   case 3:
                     return ServiceDetailsLayout(
                         serviceId:

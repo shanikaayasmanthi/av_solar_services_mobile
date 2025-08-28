@@ -86,7 +86,7 @@ class ServicesController extends GetxController {
     required int userId,
     required int serviceId,
     required int projectId,
-    required int projectNo,
+    required String projectNo,
     required String time,
   }) async {
     try {

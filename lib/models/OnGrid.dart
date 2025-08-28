@@ -1,8 +1,8 @@
 class OnGrid {
-  final int projectNo;
+  final String projectNo;
   final String? electricityBillName;
   final String? wifiUsername;
-  final String?wifiPassword;
+  final String? wifiPassword;
   final String? harmonicMeter;
   final String? remarks;
 

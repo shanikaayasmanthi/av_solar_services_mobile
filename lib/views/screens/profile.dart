@@ -1,204 +1,244 @@
-import 'package:av_solar_services/constants/colors.dart';
-import 'package:av_solar_services/views/widgets/change_password_widget.dart';
-import 'package:av_solar_services/views/widgets/profile_row_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../../constants/colors.dart';
+import '../widgets/change_password_widget.dart';
+import '../widgets/profile_row_widget.dart';
+import '../../controllers/profile.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({super.key});
+  final int userId; // 🔹 userId comes from outside
+
+  const Profile({super.key, required this.userId});
 
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  bool showChangePassword =false;
+  final ProfileController controller = Get.put(ProfileController());
+  bool showChangePassword = false;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.loadProfile(userId: widget.userId); // 🔹 use widget.userId
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child:Align(
-        alignment: Alignment.center,
-        child: SingleChildScrollView(
-          child: Column(children: [
-            const SafeArea(
-              child: SizedBox(),
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Stack(
-                  children: [
-                    const CircleAvatar(
-                      radius: 90,
-                      backgroundImage: AssetImage('lib/images/profile.jpg'),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 4,
-                      child: Container(
-                        width: 40, // smaller width
-                        height: 40, // smaller height
-                        decoration: BoxDecoration(
-                          color: bgGreen,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: textWhite, width: 2),
-                        ),
-                        padding: const EdgeInsets.all(4), // smaller padding
-                        child: IconButton(
-                          onPressed: () {
+      body: SafeArea(
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-                          },
-                          icon: const Icon(
-                            Icons.camera_alt,
-                            color: textWhite,
-                            size: 18,
-                          ),
-                          iconSize: 18, // also can control icon size
-                          padding: EdgeInsets.zero, // remove default IconButton padding
-                          constraints: const BoxConstraints(), // shrink the IconButton
-                        ),
-                      ),
-                    ),
+          final data = controller.profileData;
 
-                  ],
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Shanika Ayasmanthi',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  'Supervisor',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: textGrey,
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 10,),
-            Container(
-              margin: const EdgeInsets.all(10),
+          return Align(
+            alignment: Alignment.center,
+            child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  const SafeArea(child: SizedBox()),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text(
-                        "Profile Information",
-                        style: TextStyle(
-                            color: textBlack,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
+                      const CircleAvatar(
+                        radius: 90,
+                        backgroundImage: AssetImage('lib/images/profile.jpg'),
                       ),
-                      const SizedBox(height: 15),
-                      IconButton(
-                          onPressed: () {
-                            showModalBottomSheet(context: context, builder:(BuildContext context){
-                              return Container(
-                                padding: const EdgeInsets.all(20),
-                                child: const Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text("Edit Profile",
-                                          style: TextStyle(
-                                              color: textBlack,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18
-                                          ),),
+                      const SizedBox(height: 12),
+                      Text(
+                        data['name'] ?? 'No Name',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        data['user_type'] ?? '',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: textGrey,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Text(
+                              "Profile Information",
+                              style: TextStyle(
+                                  color: textBlack,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 15),
+                            IconButton(
+                              onPressed: () {
+                                final nameController = TextEditingController(text: data['name']);
+                                final emailController = TextEditingController(text: data['email']);
+                                final phoneController = TextEditingController(text: data['phone']);
+                                final addressController = TextEditingController(text: data['address']);
 
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              );
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.mode_edit_outline_rounded,
-                            color: textGrey,
-                          ))
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const ProfileRowWidget(topic: "Email", data: "shanika@gmail.com"),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const ProfileRowWidget(
-                    topic: "Phone No",
-                    data: "0717168036",
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const ProfileRowWidget(
-                      topic: "Address",
-                      data: "Kandewatta,Aluthgedara,Deeyagaha,Matara"),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Divider(
-                    color: textGrey,
-                    thickness: 1,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text(
-                    "Security Information",
-                    style: TextStyle(
-                        color: textBlack,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Text("Change Password",
-                        style: TextStyle(color: textBlack,fontSize: 18,
-                            fontWeight: FontWeight.bold),),
-                      const SizedBox(width: 10,),
-                      IconButton(onPressed: (){
-                        setState(() {
-                          showChangePassword = !showChangePassword;
-                        });
-                      }, icon: Icon(showChangePassword?Icons.keyboard_arrow_up_outlined:Icons.keyboard_arrow_down_outlined,color: textGrey,)),
-                      // ElevatedButton(
-                      //     style: ElevatedButton.styleFrom(
-                      //         backgroundColor: bgBlue,
-                      //         shape: RoundedRectangleBorder(
-                      //             borderRadius: BorderRadius.circular(15),
-                      //         )
-                      //     ),
-                      //     onPressed: (){},
-                      //     child: Text("Change Email",style:
-                      //     TextStyle(
-                      //         color: textWhite
-                      //     ),))
-                    ],
-                  ),
-                  showChangePassword?const ChangePasswordWidget():const SizedBox.shrink(),
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (BuildContext context) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                                        left: 20,
+                                        right: 20,
+                                        top: 20,
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Text(
+                                            "Edit Profile",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: textBlack,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 20),
+                                          TextField(
+                                            controller: nameController,
+                                            decoration: const InputDecoration(labelText: "Name"),
+                                          ),
+                                          TextField(
+                                            controller: emailController,
+                                            decoration: const InputDecoration(labelText: "Email"),
+                                          ),
+                                          TextField(
+                                            controller: phoneController,
+                                            decoration: const InputDecoration(labelText: "Phone"),
+                                          ),
+                                          TextField(
+                                            controller: addressController,
+                                            decoration: const InputDecoration(labelText: "Address"),
+                                          ),
+                                          const SizedBox(height: 20),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              final success = await controller.updateProfile(
+                                                userId: data['user_id'],
+                                                name: nameController.text,
+                                                email: emailController.text,
+                                                phone: phoneController.text,
+                                                address: addressController.text,
+                                              );
+                                              if (success && mounted) {
+                                                Navigator.pop(context);
+                                                Get.snackbar("Success", "Profile updated successfully");
+                                              } else {
+                                                Get.snackbar("Error", "Failed to update profile");
+                                              }
+                                            },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: textGreen,
+                                                foregroundColor: textWhite,
+                                                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
+                                                textStyle: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(20),
+                                                ),
+                                                elevation: 2,
+                                              ),
+                                            child: const Text("Save"),
+                                          ),
+                                          const SizedBox(height: 10),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.mode_edit_outline_rounded,
+                                color: textGrey,
+                                
+                              ),
+                            ),
+
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        ProfileRowWidget(
+                          topic: "Email",
+                          data: data['email'] ?? "",
+                        ),
+                        const SizedBox(height: 10),
+                        ProfileRowWidget(
+                          topic: "Phone No",
+                          data: data['phone'] ?? "",
+                        ),
+                        const SizedBox(height: 10),
+                        ProfileRowWidget(
+                          topic: "Address",
+                          data: data['address'] ?? "Not Provided",
+                        ),
+                        const SizedBox(height: 20),
+                        const Divider(color: textGrey, thickness: 1),
+                        const SizedBox(height: 20),
+                        const Text(
+                          "Security Information",
+                          style: TextStyle(
+                              color: textBlack,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            const Text(
+                              "Change Password",
+                              style: TextStyle(
+                                  color: textBlack,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(width: 10),
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  showChangePassword = !showChangePassword;
+                                });
+                              },
+                              icon: Icon(
+                                showChangePassword
+                                    ? Icons.keyboard_arrow_up_outlined
+                                    : Icons.keyboard_arrow_down_outlined,
+                                color: textGrey,
+                              ),
+                            ),
+                          ],
+                        ),
+                        showChangePassword
+                            ? const ChangePasswordWidget()
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
+                  )
                 ],
               ),
-            )
-          ]),
-        ),
-      ),),
+            ),
+          );
+        }),
+      ),
     );
   }
 }

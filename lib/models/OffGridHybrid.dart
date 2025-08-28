@@ -1,5 +1,5 @@
 class OffGridHybrid {
-  final int projectNo;
+  final String projectNo;
   final String? wifiUsername;
   final String?wifiPassword;
   final String? connectionType;
