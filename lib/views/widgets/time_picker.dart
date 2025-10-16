@@ -228,7 +228,7 @@ class _TimePickerState extends State<TimePicker> {
                           userId: box.read("user")['id'],
                           serviceId: widget.serviceId,
                           projectId: widget.projectId,
-                          projectNo: widget.projectNo,
+                          projectNo: widget.projectNo.toString(),
                           time: "${hour.toString().padLeft(2, '0')}:${minute
                               .toString().padLeft(2, '0')} $timeFormat");
                       if (result == 1) {

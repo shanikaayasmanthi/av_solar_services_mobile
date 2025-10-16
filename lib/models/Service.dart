@@ -1,7 +1,7 @@
 class Service {
   final int serviceId;
   final int projectId;
-  final int projectNo;
+  final String projectNo;
   final String projectName;
   final String projectAddress;
   final String customerName;

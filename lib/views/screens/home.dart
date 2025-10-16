@@ -55,7 +55,7 @@ class _HomeState extends State<Home> {
                 const SizedBox(height: 10),
                 _servicesController.isLoading.value
                     ? const Center(child: CircularProgressIndicator())
-                    : services.length>0? ListView.builder(
+                    : services.isNotEmpty? ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: services.length,
@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
                                 serviceId); //pass the serviceId for the service details page when continue the service
                           },
                         ),
-                      ):Center(child: Text("No Services Allocated",style:
+                      ):const Center(child: Text("No Services Allocated",style:
                 TextStyle(color: textGrey,fontSize: 16,fontStyle: FontStyle.italic),)),
               ],
             ),

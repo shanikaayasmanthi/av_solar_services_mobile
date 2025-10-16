@@ -26,21 +26,21 @@ class _ProfileRowWidgetState extends State<ProfileRowWidget> {
           borderRadius: BorderRadius.circular(10)// fixed this: should be Border.all(), not BoxBorder.all()
       ),
       alignment: Alignment.topLeft,
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "${widget.topic}",
-            style: TextStyle(
+            widget.topic,
+            style: const TextStyle(
               color: textGrey,
               fontSize: 15,
             ),
           ),
           Text(
             "${widget.data}",
-            style: TextStyle(
+            style: const TextStyle(
               color: textBlack,
               fontSize: 15,
             ),

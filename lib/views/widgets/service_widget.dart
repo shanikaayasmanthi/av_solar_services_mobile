@@ -3,8 +3,8 @@ import 'package:av_solar_services/models/Service.dart';
 import 'package:av_solar_services/views/widgets/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:av_solar_services/views/screens/location_screen.dart';
 import 'package:get/get.dart';
+import 'package:av_solar_services/controllers/location.dart';
 
 class ServiceWidget extends StatefulWidget {
   const ServiceWidget({
@@ -138,32 +138,51 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                               style:
                                                   TextStyle(color: textWhite),
                                             )),
+                                        // ElevatedButton(
+                                        //     //get location for the project site
+                                        //     onPressed: () {
+                                        //       Navigator.push(
+                                        //         context,
+                                        //         MaterialPageRoute(
+                                        //           builder: (context) =>
+                                        //               LocationScreen(
+                                        //                   projectId: widget
+                                        //                       .service
+                                        //                       .projectId),
+                                        //         ),
+                                        //       );
+                                        //     },
+                                        //     style: ElevatedButton.styleFrom(
+                                        //       backgroundColor: bgGreen,
+                                        //       padding:
+                                        //           const EdgeInsets.symmetric(
+                                        //               horizontal: 20,
+                                        //               vertical: 12),
+                                        //     ),
+                                        //     child: const Text(
+                                        //       "Location",
+                                        //       style:
+                                        //           TextStyle(color: textWhite),
+                                        //     )),
                                         ElevatedButton(
-                                            //get location for the project site
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      LocationScreen(
-                                                          projectId: widget
-                                                              .service
-                                                              .projectId),
-                                                ),
-                                              );
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: bgGreen,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 12),
-                                            ),
-                                            child: const Text(
-                                              "Location",
-                                              style:
-                                                  TextStyle(color: textWhite),
-                                            )),
+                                  //open Google Maps directly
+                                  onPressed: () {
+                                    final locationController = Get.put(LocationController());
+                                    locationController.openLocationInGoogleMaps(
+                                      projectId: widget.service.projectId,
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: bgGreen,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 12),
+                                  ),
+                                  child: const Text(
+                                    "Location",
+                                    style: TextStyle(color: textWhite),
+                                  ),
+                                ),
+
                                       ],
                                     ),
                                   );
@@ -193,7 +212,7 @@ class _ServiceWidgetState extends State<ServiceWidget> {
                                   return SizedBox(
                                       // height: 450,
                                       child: TimePicker(
-                                    projectNo: widget.service.projectNo,
+                                    projectNo: int.parse(widget.service.projectNo),
                                     serviceId: widget.service.serviceId,
                                     projectId: widget.service.projectId,
                                   ));

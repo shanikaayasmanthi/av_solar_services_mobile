@@ -3,6 +3,7 @@ import 'package:av_solar_services/methods/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LocationController extends GetxController {
   final isLoading = false.obs;
@@ -63,6 +64,26 @@ class LocationController extends GetxController {
     isLoading.value = false;
   }
 }
+
+Future<void> openLocationInGoogleMaps({required int projectId}) async {  //newly added function to direct to Google Maps
+  await getLocation(projectId: projectId);
+
+  if (lattitude.value != null && longitude.value != null) {
+    final googleMapsUrl =
+        'https://www.google.com/maps/search/?api=1&query=${lattitude.value},${longitude.value}';
+    if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+      await launchUrl(
+        Uri.parse(googleMapsUrl),
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      showSnackBar("Could not launch Google Maps.");
+    }
+  } else {
+    showSnackBar("Location data not available for this project.");
+  }
+}
+
   // Method to show a snackbar (can be called from UI)
   void showSnackBar(String message) {
     if (Get.context != null) {

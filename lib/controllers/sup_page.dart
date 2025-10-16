@@ -5,6 +5,9 @@ class SupervisorPageController extends GetxController{
 
   var currentPage = 0.obs;
   var selectedService = 0.obs;
+  var selectedServiceData = <String, dynamic>{}.obs; // Add this line
+  var isEditingService = false.obs; // Add this line
+  var showFormFullScreen = false.obs;
 
   void goToHome() {
     currentPage.value = 0;
@@ -22,6 +25,13 @@ class SupervisorPageController extends GetxController{
     selectedService.value = serviceId;
     currentPage.value = 3;
   }
+  void openEditServiceForm(int serviceId) {
+    selectedService.value = serviceId;
+    currentPage.value = 4; // New page for editing
+    isEditingService.value = true;
+    showFormFullScreen.value = true; // Show form in full screen
+  }
+
 
   void closeServiceDetails() {
     debugPrint('done');

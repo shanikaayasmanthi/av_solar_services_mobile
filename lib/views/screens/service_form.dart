@@ -52,7 +52,7 @@ class _ServiceFormState extends State<ServiceForm> {
               userId: box.read('user')['id'],
             );
             debugPrint("Submit result: $result");
-            Get.snackbar("${_servicesController.result.value.toString()}","",
+            Get.snackbar(_servicesController.result.value.toString(),"",
               snackPosition: SnackPosition.TOP,
               backgroundColor: bgLightGreen,
               colorText: textBlack
