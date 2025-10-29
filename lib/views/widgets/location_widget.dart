@@ -1,8 +1,5 @@
-// Core Flutter imports
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import for SystemUiOverlayStyle
-
-// Package imports
+import 'package:flutter/services.dart'; 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
@@ -10,14 +7,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:av_solar_services/controllers/location.dart'; // Ensure correct path
-
-// Application-specific imports
+import 'package:av_solar_services/controllers/location.dart'; 
 import 'package:av_solar_services/constants/colors.dart';
 
 class LocationWidget extends StatefulWidget {
-  final double? lattitude; // Made nullable to handle initial loading
-  final double? longitude; // Made nullable to handle initial loading
+  final double? lattitude; 
+  final double? longitude; 
   final VoidCallback onOpenGoogleMaps;
 
   const LocationWidget({
@@ -35,8 +30,8 @@ class _LocationWidgetState extends State<LocationWidget> {
   late GoogleMapController _mapController;
   String? _currentLocation;
   String? _projectLocation;
-  List<LatLng> _routePoints = []; // State variable for route points
-  bool _showDirection = false; // State to toggle direction display
+  List<LatLng> _routePoints = [];
+  bool _showDirection = false; 
   String _distance = 'Distance not available'; // State for distance
   final LocationController locationController = Get.find<LocationController>(); // Access controller
 
@@ -121,7 +116,6 @@ class _LocationWidgetState extends State<LocationWidget> {
     }
 
     final currentLatLng = _currentLocation!.split(', ').map(double.parse).toList();
-    // Replace YOUR_API_KEY with the key from AndroidManifest.xml
     final String url =
         'https://maps.googleapis.com/maps/api/directions/json?origin=${currentLatLng[0]},${currentLatLng[1]}&destination=${locationController.lattitude.value ?? widget.lattitude},${locationController.longitude.value ?? widget.longitude}&mode=driving&key=com.google.android.geo.API_KEY'; // Use controller or widget data
 
@@ -137,7 +131,7 @@ class _LocationWidgetState extends State<LocationWidget> {
               setState(() {
                 _routePoints = points;
                 _showDirection = true; // Enable direction display
-                // Enhanced distance extraction with detailed debugging
+                // Extract distance information
                 print('Routes: ${data['routes']?.length}, Legs: ${data['routes']?[0]['legs']?.length}');
                 if (data['routes'] != null && data['routes'].isNotEmpty &&
                     data['routes'][0]['legs'] != null && data['routes'][0]['legs'].isNotEmpty &&
@@ -240,14 +234,14 @@ class _LocationWidgetState extends State<LocationWidget> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: bgGreen, // Set status bar background to bgGreen
-        statusBarIconBrightness: Brightness.light, // Ensure icons are visible (e.g., white)
+        statusBarColor: bgGreen, 
+        statusBarIconBrightness: Brightness.light,
       ),
       child: Stack(
         children: [
-          // Green area above app bar
+      
           Container(
-            height: 20.0, // Adjust height as needed
+            height: 20.0, 
             color: bgGreen,
           ),
           Scaffold(
@@ -260,7 +254,7 @@ class _LocationWidgetState extends State<LocationWidget> {
                   color: textBlack,
                 ),
               ),
-              elevation: 0, // Remove shadow to blend with green area
+              elevation: 0, 
             ),
             body: Column(
               children: [
@@ -409,6 +403,7 @@ class _LocationWidgetState extends State<LocationWidget> {
             ),
           ),
         ],
+        
       ),
     );
   }

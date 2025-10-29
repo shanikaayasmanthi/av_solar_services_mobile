@@ -6,7 +6,7 @@ import '../widgets/profile_row_widget.dart';
 import '../../controllers/profile.dart';
 
 class Profile extends StatefulWidget {
-  final int userId; // 🔹 userId comes from outside
+  final int userId; 
 
   const Profile({super.key, required this.userId});
 
@@ -242,3 +242,4 @@ class _ProfileState extends State<Profile> {
     );
   }
 }
+

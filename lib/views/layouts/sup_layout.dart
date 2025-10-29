@@ -101,7 +101,7 @@ class _SupLayoutState extends State<SupLayout> {
                       },
                       icon: const Icon(
                         Icons.logout_rounded,
-                        color: textRed,
+                        color: textGreen,
                         size: 22,
                       ),
                     )

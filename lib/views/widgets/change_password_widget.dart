@@ -192,7 +192,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
                           : Center(
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: bgBlue,
+                                      backgroundColor: bgGreen,
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(15))),

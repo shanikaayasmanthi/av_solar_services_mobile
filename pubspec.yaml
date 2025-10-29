@@ -13,7 +13,8 @@ dependencies:
     sdk: flutter
   http: ^1.3.0
   get: ^4.7.2
-  get_storage: ^2.1.1  # Add version or remove if not used
+  app_links: ^6.4.1
+  get_storage: ^2.1.1 
   path_provider: ^2.1.1
   cupertino_icons: ^1.0.8   #URI
   flutter_phone_direct_caller: ^2.1.0

@@ -17,6 +17,33 @@ class ServicesController extends GetxController {
   final box = GetStorage();
 
 
+Future<Map<String, dynamic>> getProjectCoordinates({required int projectId}) async {
+  try {
+    var data = {'project_id': projectId};
+    
+    final response = await API().postRequest(
+      route: '/sup/get_project',
+      data: data, 
+      token: box.read('token'),
+    );
+
+    if (response.statusCode == 200) {
+      final decoded = json.decode(response.body);
+      if (decoded['data'] != null && decoded['data']['project'] != null) {
+        final project = decoded['data']['project'];
+        return {
+          'longitude': project['longitude']?.toString() ?? '',
+          'latitude': project['lattitude']?.toString() ?? '', // Note: typo in DB column name
+        };
+      }
+    }
+    return {'longitude': '', 'latitude': ''};
+  } catch (e) {
+    debugPrint('Error fetching project coordinates: $e');
+    return {'longitude': '', 'latitude': ''};
+  }
+}
+
  //get completed services by project
   Future<List<CompletedService>> getCompletedServicesByProject({
     required int projectId,
