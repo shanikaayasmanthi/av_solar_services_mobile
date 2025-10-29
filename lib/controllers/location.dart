@@ -58,14 +58,14 @@ class LocationController extends GetxController {
     }
   } catch (e) {
     result.value = 'Error: ${e.toString()}';
-    // You might want to log the error for debugging
+    // debugging logs
     debugPrint('Error fetching location: $e');
   } finally {
     isLoading.value = false;
   }
 }
 
-Future<void> openLocationInGoogleMaps({required int projectId}) async {  //newly added function to direct to Google Maps
+Future<void> openLocationInGoogleMaps({required int projectId}) async {  //function to direct to Google Maps
   await getLocation(projectId: projectId);
 
   if (lattitude.value != null && longitude.value != null) {

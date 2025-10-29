@@ -418,7 +418,7 @@ if (mounted) {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Project: ${service['project_name']}",
+                      "Project No: ${service['project_no'] ?? 'N/A'}",
                       style: const TextStyle(
                         color: textBlack,
                         fontWeight: FontWeight.bold,
@@ -437,7 +437,7 @@ if (mounted) {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  "Project No: ${service['project_no'] ?? 'N/A'}",
+                  "Project: ${service['project_name']}",
                   style: const TextStyle(color: textBlack),
                 ),
                 const SizedBox(height: 4),

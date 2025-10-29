@@ -2,6 +2,7 @@ import 'package:av_solar_services/constants/colors.dart';
 import 'package:av_solar_services/controllers/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'forgot_password.dart';
 
 class Login extends StatefulWidget {
   const Login ({super.key});
@@ -112,7 +113,7 @@ class _LoginState extends State<Login>{
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: (){},
+                          onPressed: (){Get.to(() => const ForgotPasswordPage());},
                           child: const Text("forget password",
                           style: TextStyle(color: textGrey)),
                         ),
@@ -138,8 +139,8 @@ class _LoginState extends State<Login>{
                             ?const CircularProgressIndicator()
                             : ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: bgBlue,
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            backgroundColor: bgGreen,
+                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -178,16 +179,16 @@ class _LoginState extends State<Login>{
                       const SizedBox(height: 20,),
 
                       //register page button
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("Haven't Account     |"),
-                          TextButton(
-                              onPressed: (){},
-                              child: const Text("Sign Up",
-                                  style: TextStyle(color: textBlue),))
-                        ],
-                      )
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     const Text("Haven't Account     |"),
+                      //     TextButton(
+                      //         onPressed: (){},
+                      //         child: const Text("Sign Up",
+                      //             style: TextStyle(color: textBlue),))
+                      //   ],
+                      // )
                     ]
                 ),)
               ],

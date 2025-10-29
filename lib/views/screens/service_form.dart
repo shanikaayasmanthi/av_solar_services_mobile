@@ -78,51 +78,111 @@ class _ServiceFormState extends State<ServiceForm> {
     );
   }
 
+  // List<Step> getSteps() => [
+  //   Step(
+  //     state: widget.currentStep > 0 ? StepState.complete : StepState.indexed,
+  //     isActive: widget.currentStep >= 0,
+  //     title: const Text("1"),
+  //     content: Form(
+  //       key: _formKeys[0],
+  //       child: AcDcFormWidget(serviceId: widget.serviceId),
+  //     ),
+  //   ),
+  //   Step(
+  //     state: widget.currentStep > 1 ? StepState.complete : StepState.indexed,
+  //     isActive: widget.currentStep >= 1,
+  //     title: const Text("2"),
+  //     content: Form(
+  //       key: _formKeys[1],
+  //       child: RoofWorkFormWidget(serviceId: widget.serviceId),
+  //     ),
+  //   ),
+  //   Step(
+  //     state: widget.currentStep > 2 ? StepState.complete : StepState.indexed,
+  //     isActive: widget.currentStep >= 2,
+  //     title: const Text("3"),
+  //     content: Form(
+  //       key: _formKeys[2],
+  //       child: OutdoorWorkFormWidget(serviceId: widget.serviceId),
+  //     ),
+  //   ),
+  //   Step(
+  //     state: widget.currentStep > 3 ? StepState.complete : StepState.indexed,
+  //     isActive: widget.currentStep >= 3,
+  //     title: const Text("4"),
+  //     content: Form(
+  //       key: _formKeys[3],
+  //       child: MainpanelWorkFormWidget(serviceId: widget.serviceId),
+  //     ),
+
+  //   ),
+  //   Step(
+  //     state: widget.currentStep > 4 ? StepState.complete : StepState.indexed,
+  //     isActive: widget.currentStep >= 4,
+  //     title: const Text("5"),
+  //     content: Form(
+  //       key: _formKeys[4],
+  //       child: TechnicianFormWidget(serviceId: widget.serviceId),
+  //     ),
+  //   ),
+  // ];
   List<Step> getSteps() => [
-    Step(
-      state: widget.currentStep > 0 ? StepState.complete : StepState.indexed,
-      isActive: widget.currentStep >= 0,
-      title: const Text("1"),
-      content: Form(
-        key: _formKeys[0],
-        child: AcDcFormWidget(serviceId: widget.serviceId),
-      ),
+  Step(
+    state: widget.currentStep > 0 ? StepState.complete : StepState.indexed,
+    isActive: widget.currentStep >= 0,
+    title: const Text("1"),
+    content: Form(
+      key: _formKeys[0],
+      child: widget.currentStep == 0
+          ? AcDcFormWidget(
+            serviceId: widget.serviceId)
+          : const SizedBox.shrink(), // lazy load
     ),
-    Step(
-      state: widget.currentStep > 1 ? StepState.complete : StepState.indexed,
-      isActive: widget.currentStep >= 1,
-      title: const Text("2"),
-      content: Form(
-        key: _formKeys[1],
-        child: RoofWorkFormWidget(serviceId: widget.serviceId),
-      ),
+  ),
+  Step(
+    state: widget.currentStep > 1 ? StepState.complete : StepState.indexed,
+    isActive: widget.currentStep >= 1,
+    title: const Text("2"),
+    content: Form(
+      key: _formKeys[1],
+      child: widget.currentStep == 1
+          ? RoofWorkFormWidget(serviceId: widget.serviceId)
+          : const SizedBox.shrink(),
     ),
-    Step(
-      state: widget.currentStep > 2 ? StepState.complete : StepState.indexed,
-      isActive: widget.currentStep >= 2,
-      title: const Text("3"),
-      content: Form(
-        key: _formKeys[2],
-        child: OutdoorWorkFormWidget(serviceId: widget.serviceId),
-      ),
+  ),
+  Step(
+    state: widget.currentStep > 2 ? StepState.complete : StepState.indexed,
+    isActive: widget.currentStep >= 2,
+    title: const Text("3"),
+    content: Form(
+      key: _formKeys[2],
+      child: widget.currentStep == 2
+          ? OutdoorWorkFormWidget(serviceId: widget.serviceId)
+          : const SizedBox.shrink(),
     ),
-    Step(
-      state: widget.currentStep > 3 ? StepState.complete : StepState.indexed,
-      isActive: widget.currentStep >= 3,
-      title: const Text("4"),
-      content: Form(
-        key: _formKeys[3],
-        child: MainpanelWorkFormWidget(serviceId: widget.serviceId),
-      ),
+  ),
+  Step(
+    state: widget.currentStep > 3 ? StepState.complete : StepState.indexed,
+    isActive: widget.currentStep >= 3,
+    title: const Text("4"),
+    content: Form(
+      key: _formKeys[3],
+      child: widget.currentStep == 3
+          ? MainpanelWorkFormWidget(serviceId: widget.serviceId)
+          : const SizedBox.shrink(),
     ),
-    Step(
-      state: widget.currentStep > 4 ? StepState.complete : StepState.indexed,
-      isActive: widget.currentStep >= 4,
-      title: const Text("5"),
-      content: Form(
-        key: _formKeys[4],
-        child: TechnicianFormWidget(serviceId: widget.serviceId),
-      ),
+  ),
+  Step(
+    state: widget.currentStep > 4 ? StepState.complete : StepState.indexed,
+    isActive: widget.currentStep >= 4,
+    title: const Text("5"),
+    content: Form(
+      key: _formKeys[4],
+      child: widget.currentStep == 4
+          ? TechnicianFormWidget(serviceId: widget.serviceId)
+          : const SizedBox.shrink(),
     ),
-  ];
+  ),
+];
+
 }

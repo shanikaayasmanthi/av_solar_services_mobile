@@ -371,38 +371,38 @@ class _ServiceFormToEditState extends State<ServiceFormToEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            size: 18,
-            color: textBlack,
-          ),
-          style: IconButton.styleFrom(
-            backgroundColor: bgGreen,
-            padding: const EdgeInsets.all(4.0),   
-            visualDensity: VisualDensity.compact,  
-           // minimumSize:const Size(40, 30),  
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-            ),
-          ),
-          onPressed: () {
-            final supervisorController = Get.find<SupervisorPageController>();
-            supervisorController.goToSummarize();
-          },
-        ),
-        //centerTitle: true,
-        titleSpacing: 0,
-        title: const Text(
-          'Edit Service',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      // appBar: AppBar(
+        // leading: IconButton(
+        //   icon: const Icon(
+        //     Icons.arrow_back,
+        //     size: 18,
+        //     color: textBlack,
+        //   ),
+        //   style: IconButton.styleFrom(
+        //     backgroundColor: bgGreen,
+        //     padding: const EdgeInsets.all(4.0),   
+        //     visualDensity: VisualDensity.compact,  
+        //    // minimumSize:const Size(40, 30),  
+        //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        //     shape: RoundedRectangleBorder(
+        //       borderRadius: BorderRadius.circular(5),
+        //     ),
+        //   ),
+        //   onPressed: () {
+        //     final supervisorController = Get.find<SupervisorPageController>();
+        //     supervisorController.goToSummarize();
+        //   },
+        // ),
+        // //centerTitle: true,
+        // titleSpacing: 0,
+        // title: const Text(
+        //   'Edit Service',
+        //   style: TextStyle(
+        //     fontSize: 18,
+        //     fontWeight: FontWeight.bold,
+        //   ),
+        // ),
+      // ),
       body: Stack(
         children: [
           Stepper(
@@ -467,7 +467,10 @@ class _ServiceFormToEditState extends State<ServiceFormToEdit> {
           title: const Text("1"),
           content: Form(
             key: _formKeys[0],
-            child: AcDcFormWidget(serviceId: widget.serviceId),
+            child: AcDcFormWidget(
+              serviceId: widget.serviceId
+              
+            ),
           ),
         ),
         Step(
