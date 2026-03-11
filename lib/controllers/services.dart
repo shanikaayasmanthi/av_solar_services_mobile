@@ -58,10 +58,10 @@ Future<Map<String, dynamic>> getProjectCoordinates({required int projectId}) asy
         data: data,
         token: box.read('token'),
       );
-
       if (response.statusCode == 200) {
         final decoded = json.decode(response.body);
         final List<dynamic> services = decoded['data']['services'];
+        print(services);
         return services.map((json) => CompletedService.fromJson(json)).toList();
       } else {
         result.value = 'Error fetching completed services';
@@ -69,6 +69,7 @@ Future<Map<String, dynamic>> getProjectCoordinates({required int projectId}) asy
       }
     } catch (e) {
       result.value = 'Error: ${e.toString()}';
+      print("e");
       return [];
     }
   }

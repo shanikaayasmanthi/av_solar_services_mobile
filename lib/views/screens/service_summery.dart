@@ -34,6 +34,7 @@ class _ServiceSummeryState extends State<ServiceSummery> {
       // Calculate free and paid counts
       freeServicesCount = services.where((s) => !s.isPaid).length;
       paidServicesCount = services.where((s) => s.isPaid).length;
+      print(services);
       return services;
     });
   }

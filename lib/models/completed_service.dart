@@ -30,7 +30,7 @@ class CompletedService {
       serviceRound: json['service_round'],
       serviceType: json['service_type'],
       serviceDate: DateTime.parse(json['service_date']),
-      serviceTime: json['service_time'],
+      serviceTime: json['service_time'].toString(),
       remarks: json['remarks'],
       outdoorWork: json['outdoor_work'],
       roofWork: json['roof_work'],
