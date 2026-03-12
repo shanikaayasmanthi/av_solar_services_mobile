@@ -3,7 +3,7 @@ description: "A new Flutter project."
 
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.5.1
@@ -32,7 +32,9 @@ dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "lib/images/icon.png"
+  image_path: "lib/images/appicon.png"
+#  adaptive_icon_background: "#ffffff"
+#  adaptive_icon_foreground: "lib/images/appicon.png"
   
 dev_dependencies:
   flutter_test:

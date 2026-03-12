@@ -69,12 +69,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:app_links/app_links.dart';
+import 'package:get_storage/get_storage.dart';
 
-void main() {
+void main() async {
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: bgGreen,
   ));
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
@@ -93,6 +95,23 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _initDeepLinks();
+  }
+
+  String _getInitialRoute() {
+    final box = GetStorage();
+    final String? token = box.read('token');
+    final user = box.read('user');
+    debugPrint("Checking Storage - Token: $token");
+
+    if (token != null && token.isNotEmpty) {
+      // Check user type to send them to the correct dashboard
+      if (user != null && user['user_type'] == 'supervisor') {
+        return '/sup';
+      }
+      return '/'; // Or wherever your default home is
+    }
+
+    return '/'; // Go to Login if no token exists
   }
 
 void _initDeepLinks() async {
@@ -156,7 +175,7 @@ void _initDeepLinks() async {
         colorScheme: ColorScheme.fromSeed(seedColor: bgGreen),
         useMaterial3: true,
       ),
-      initialRoute: "/",
+      initialRoute: _getInitialRoute(),
       getPages: [
         GetPage(name: '/', page: () => const Login()),
         GetPage(name: '/forgot-password', page: () => const ForgotPasswordPage()),

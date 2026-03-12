@@ -15,6 +15,37 @@ class AuthenticationController extends GetxController {
   final token = ''.obs;
   final box = GetStorage();
 
+  @override
+  void onInit() {
+    super.onInit();
+
+    // This tells Flutter: "Wait until you are done drawing the current screen,
+    // then run this code immediately after."
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkLoginStatus();
+    });
+  }
+
+  void checkLoginStatus() {
+    String? savedToken = box.read('token');
+
+    // Get the current route name
+    String currentRoute = Get.currentRoute;
+
+    if (savedToken != null && savedToken.isNotEmpty) {
+      token.value = savedToken;
+
+      // ONLY navigate if we aren't already on home
+      if (currentRoute != '/sup') {
+        Get.offAllNamed('/sup');
+      }
+    } else {
+      // ONLY navigate if we aren't already on login
+      if (currentRoute != '/login') {
+        Get.offAllNamed('/login');
+      }
+    }
+  }
 
   //login function
   Future login(
@@ -102,6 +133,7 @@ class AuthenticationController extends GetxController {
           token: token
           );
       if(response.statusCode == 200){
+        // box.erase();
         return true;
       }
     }catch(e){}
